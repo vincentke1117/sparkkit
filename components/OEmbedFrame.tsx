@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
-export function OEmbedFrame({ html }: { html: string }) {
+export function OEmbedFrame({ html, title }: { html: string; title?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -35,7 +34,11 @@ export function OEmbedFrame({ html }: { html: string }) {
   }, []);
 
   return (
-    <div ref={containerRef} className="rounded-3xl border border-white/10 bg-black/40 p-4">
+    <div
+      ref={containerRef}
+      className="rounded-3xl border border-white/10 bg-black/40 p-4"
+      aria-label={title ? `${title} embed` : undefined}
+    >
       {shouldRender ? (
         <div dangerouslySetInnerHTML={{ __html: html }} />
       ) : (
