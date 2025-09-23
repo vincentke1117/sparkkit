@@ -1,0 +1,186 @@
+'use client';
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useMemo, useState, FormEvent, useEffect } from 'react';
+
+const PAGE_SIZE = 12;
+
+type Props = {
+  availableTags: string[];
+  stacks: string[];
+  difficulties: string[];
+};
+
+export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const initialTags = useMemo(() => new Set(searchParams.getAll('tags')), [searchParams]);
+
+  const [query, setQuery] = useState(searchParams.get('q') ?? '');
+  const [stack, setStack] = useState(searchParams.get('stack') ?? '');
+  const [difficulty, setDifficulty] = useState(searchParams.get('difficulty') ?? '');
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(initialTags);
+
+  useEffect(() => {
+    setQuery(searchParams.get('q') ?? '');
+    setStack(searchParams.get('stack') ?? '');
+    setDifficulty(searchParams.get('difficulty') ?? '');
+    setSelectedTags(new Set(searchParams.getAll('tags')));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.toString()]);
+
+  function toggleTag(tag: string) {
+    setSelectedTags((prev) => {
+      const next = new Set(prev);
+      if (next.has(tag)) {
+        next.delete(tag);
+      } else {
+        next.add(tag);
+      }
+      return next;
+    });
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const params = new URLSearchParams();
+    if (query.trim()) {
+      params.set('q', query.trim());
+    }
+    if (stack) {
+      params.set('stack', stack);
+    }
+    if (difficulty) {
+      params.set('difficulty', difficulty);
+    }
+    Array.from(selectedTags)
+      .filter(Boolean)
+      .forEach((tag) => params.append('tags', tag));
+
+    const queryString = params.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname ?? '/showcases');
+  }
+
+  function handleReset() {
+    setQuery('');
+    setStack('');
+    setDifficulty('');
+    setSelectedTags(new Set());
+    router.push(pathname ?? '/showcases');
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="glass-panel flex flex-col gap-6 rounded-3xl p-6 text-sm text-white/80"
+      aria-label="Showcase filters"
+    >
+      <div className="flex flex-col gap-2">
+        <label htmlFor="query" className="text-xs font-semibold uppercase tracking-widest text-white/60">
+          关键词
+        </label>
+        <input
+          id="query"
+          name="q"
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="搜索标题、摘要或解读..."
+          className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/40"
+        />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-widest text-white/60">
+          Stack
+          <select
+            value={stack}
+            onChange={(event) => setStack(event.target.value)}
+            className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white"
+          >
+            <option value="">全部</option>
+            {stacks.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-widest text-white/60">
+          难度
+          <select
+            value={difficulty}
+            onChange={(event) => setDifficulty(event.target.value)}
+            className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white"
+          >
+            <option value="">全部</option>
+            {difficulties.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <fieldset className="flex flex-col gap-3">
+        <legend className="text-xs font-semibold uppercase tracking-widest text-white/60">标签</legend>
+        <div className="flex flex-wrap gap-2">
+          {availableTags.map((tag) => {
+            const checked = selectedTags.has(tag);
+            return (
+              <label
+                key={tag}
+                className={`focus-outline inline-flex cursor-pointer select-none items-center gap-2 rounded-full border px-3 py-2 text-xs transition ${
+                  checked
+                    ? 'border-accent/70 bg-accent/20 text-white'
+                    : 'border-white/20 bg-white/5 text-white/70 hover:border-accent/50 hover:text-white'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={checked}
+                  onChange={() => toggleTag(tag)}
+                  name="tags"
+                  value={tag}
+                />
+                #{tag}
+              </label>
+            );
+          })}
+          {availableTags.length === 0 ? (
+            <span className="text-white/40">暂无标签</span>
+          ) : null}
+        </div>
+      </fieldset>
+
+      <div className="mt-2 flex flex-wrap items-center gap-4">
+        <button
+          type="submit"
+          className="neon-border focus-outline inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white"
+        >
+          应用筛选
+        </button>
+        <button
+          type="button"
+          onClick={handleReset}
+          className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm text-white/70 hover:border-accent/60 hover:text-white"
+        >
+          重置
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export function usePagination() {
+  const searchParams = useSearchParams();
+  const page = Number.parseInt(searchParams.get('page') ?? '1', 10);
+  return Number.isNaN(page) || page < 1 ? 1 : page;
+}
+
+export { PAGE_SIZE };
