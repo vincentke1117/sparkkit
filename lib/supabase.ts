@@ -4,7 +4,7 @@ import { createClient, SupabaseClient, PostgrestError } from '@supabase/supabase
 import { cache } from 'react';
 
 import { mockShowcases, mockStatus } from './mockData';
-import { applyFallbackFilters, getSortedMockShowcases, SHOWCASE_TABLE_CANDIDATES } from './showcase-data';
+import { applyFallbackFilters, getSortedMockShowcases, SHOWCASE_TABLE_CANDIDATES, sortShowcasesByRecency } from './showcase-data';
 import { ShowcaseFilters, ShowcaseRecord, SyncStatus } from './types';
 
 const STATUS_VIEW_CANDIDATES = Array.from(
@@ -100,7 +100,7 @@ export const fetchShowcases = cache(async (filters: ShowcaseFilters = {}): Promi
     }
 
     if (data) {
-      return data;
+      return sortShowcasesByRecency(data);
     }
   }
 

@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient, PostgrestError } from '@supabase/supabase-js';
 
-import { applyFallbackFilters, getSortedMockShowcases, SHOWCASE_TABLE_CANDIDATES } from './showcase-data';
+import { applyFallbackFilters, getSortedMockShowcases, SHOWCASE_TABLE_CANDIDATES, sortShowcasesByRecency } from './showcase-data';
 import { ShowcaseFilters, ShowcaseRecord } from './types';
 
 let client: SupabaseClient | null = null;
@@ -89,7 +89,7 @@ export async function fetchShowcasesClient(filters: ShowcaseFilters = {}): Promi
     }
 
     if (data) {
-      return data;
+      return sortShowcasesByRecency(data);
     }
   }
 

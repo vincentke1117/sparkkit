@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { StatusPageContent } from '@/components/StatusPageContent';
 import { fetchSyncStatus } from '@/lib/supabase';
 import { getSiteUrl } from '@/lib/site';
+
 export const revalidate = 300; // 5 minutes
 
 export const metadata: Metadata = {

@@ -49,10 +49,34 @@ export function OEmbedFrame({
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!shouldRender) {
+      return;
+    }
+
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const embeds = container.querySelectorAll('iframe, embed, object');
+    embeds.forEach((element) => {
+      const target = element as HTMLElement;
+      target.removeAttribute('width');
+      target.removeAttribute('height');
+      target.style.width = '100%';
+      target.style.height = '100%';
+      target.style.minHeight = 'inherit';
+      target.style.display = 'block';
+      target.style.border = '0';
+      target.style.borderRadius = '24px';
+    });
+  }, [shouldRender]);
+
   return (
     <div
       ref={containerRef}
-      className={clsx('rounded-3xl border border-white/10 bg-black/40 p-4', minHeightClass, className)}
+      className={clsx('oembed-frame rounded-3xl border border-white/10 bg-black/40 p-4', minHeightClass, className)}
       aria-label={title ? `${title} embed` : undefined}
     >
       {shouldRender ? (

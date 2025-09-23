@@ -116,3 +116,19 @@ a {
   border-radius: 9999px;
   background: linear-gradient(135deg, var(--spark-accent), var(--spark-accent-secondary));
 }
+
+.oembed-frame {
+  position: relative;
+  overflow: hidden;
+}
+
+.oembed-frame iframe,
+.oembed-frame embed,
+.oembed-frame object {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: inherit;
+  border: 0 !important;
+  border-radius: 24px !important;
+  display: block;
+}

@@ -9,18 +9,26 @@ export const SHOWCASE_TABLE_CANDIDATES = Array.from(
   ),
 );
 
+
+function getRecencyTimestamp(record: ShowcaseRecord): number {
+  const created = record.created_at ? Date.parse(record.created_at) : 0;
+  const updated = record.updated_at ? Date.parse(record.updated_at) : 0;
+  return Math.max(created, updated);
+}
+
+export function sortShowcasesByRecency(records: ShowcaseRecord[]): ShowcaseRecord[] {
+  return [...records].sort((a, b) => getRecencyTimestamp(b) - getRecencyTimestamp(a));
+}
+
 export function getSortedMockShowcases(): ShowcaseRecord[] {
-  return [...mockShowcases].sort((a, b) => {
-    const aDate = Date.parse(a.created_at ?? '') || 0;
-    const bDate = Date.parse(b.created_at ?? '') || 0;
-    return bDate - aDate;
-  });
+  return sortShowcasesByRecency(mockShowcases);
 }
 
 export function applyFallbackFilters(data: ShowcaseRecord[], filters: ShowcaseFilters): ShowcaseRecord[] {
+  const sorted = sortShowcasesByRecency(data);
   const query = filters.query?.trim().toLowerCase();
   const tags = filters.tags?.map((tag) => tag.toLowerCase());
-  return data
+  return sorted
     .filter((item) => {
       let matches = true;
       if (query) {
