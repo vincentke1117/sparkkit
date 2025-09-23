@@ -1,12 +1,11 @@
 # SparkKit
 
-SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展示站点，聚焦于 CodePen 灵感作品的精选与多语言解读。站点通过 SSR + ISR 策略保障性能与 SEO，以移动端优先的玻璃拟态视觉呈现“封面 / 列表 / 搜索 / 详情 / 状态 / RSS / Sitemap”全链路体验。
+SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展示站点，聚焦于 CodePen 灵感作品的精选与多语言解读。站点通过 SSR + ISR 策略保障性能与 SEO，以移动端优先的玻璃拟态视觉呈现“封面 / 列表 / 详情 / 状态 / RSS / Sitemap”全链路体验。
 
 ## 功能概览
 
-- **封面页**：深色霓虹视觉 + 今日精选 6 条 + GEO 时间徽章，CTA 支持浏览与筛选。
+- **封面页**：深色霓虹视觉 + 今日精选 6 条 + GEO 时间徽章，可一键展开霓虹瀑布流浏览全部作品。
 - **列表页 `/showcases`**：关键词 + 标签 + Stack + 难度筛选，分页呈现卡片，空态友好文案。
-- **搜索页 `/search`**：与列表页共用筛选组件，强调组合查询体验。
 - **详情页 `/p/[user]/[slug]`**：标题 / 作者 / 原链 / 缩略图 / 多语言解读 / 复用步骤 / 性能提示 / 懒加载 oEmbed。缺少内容时提供 CodePen CTA。
 - **状态页 `/status`**：展示版本号、最近同步时间、已索引数量与缓存命中率描述。
 - **Sitemap & RSS**：`/sitemap.xml`（最近 5000 条，日更）与 `/rss.xml`（最近 100 条，6 小时刷新）。
@@ -39,7 +38,7 @@ SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展
 - **数据层**：`@supabase/supabase-js` 通过 ANON key 只读访问；`fetchShowcases` / `fetchShowcaseByUserAndSlug` / `fetchDistinctFilters` / `fetchSyncStatus` 提供统一数据入口。
 - **缓存策略**：
   - 首页 `revalidate = 1800`（30 分钟）；
-  - 列表 / 搜索页 `revalidate = 900`（15 分钟）；
+  - 列表页 `revalidate = 900`（15 分钟）；
   - 详情页 `revalidate = 600`（10 分钟）；
   - 状态页 `revalidate = 300`（5 分钟）；
   - Sitemap 每日刷新，RSS 每 6 小时刷新。

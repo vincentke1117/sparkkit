@@ -8,6 +8,8 @@ import { ShowcaseFilters, PAGE_SIZE } from './ShowcaseFilters';
 import { PaginationControls } from './PaginationControls';
 import { fetchShowcasesClient } from '@/lib/supabase-browser';
 import type { ShowcaseFilters as ShowcaseFilterInput, ShowcaseRecord } from '@/lib/types';
+import { getUiCopy } from '@/lib/translations';
+import { useLanguage } from './LanguageProvider';
 
 type FilterOptions = {
   availableTags: string[];
@@ -54,6 +56,8 @@ export function ShowcaseExplorer({
   pageSize = PAGE_SIZE,
 }: Props) {
   const searchParams = useSearchParams();
+  const { locale } = useLanguage();
+  const copy = getUiCopy(locale);
   const [state, setState] = useState<State>({
     records: initialRecords,
     hasNext: initialHasNext,
@@ -136,8 +140,8 @@ export function ShowcaseExplorer({
           </div>
         ) : state.records.length === 0 ? (
           <div className="glass-panel flex flex-col items-center gap-3 rounded-3xl p-12 text-center text-white/70">
-            <h2 className="text-lg font-semibold text-white">暂无结果</h2>
-            <p>调整筛选条件或尝试不同关键词。</p>
+            <h2 className="text-lg font-semibold text-white">{copy.explorer.noResultsTitle}</h2>
+            <p>{copy.explorer.noResultsBody}</p>
           </div>
         ) : (
           <>

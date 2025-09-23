@@ -1,7 +1,23 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-export function OEmbedFrame({ html, title }: { html: string; title?: string }) {
+import { clsx } from 'clsx';
+
+type OEmbedFrameProps = {
+  html: string;
+  title?: string;
+  className?: string;
+  minHeightClass?: string;
+  loadingText: string;
+};
+
+export function OEmbedFrame({
+  html,
+  title,
+  className,
+  minHeightClass = 'min-h-[28rem]',
+  loadingText,
+}: OEmbedFrameProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -36,14 +52,14 @@ export function OEmbedFrame({ html, title }: { html: string; title?: string }) {
   return (
     <div
       ref={containerRef}
-      className="rounded-3xl border border-white/10 bg-black/40 p-4"
+      className={clsx('rounded-3xl border border-white/10 bg-black/40 p-4', minHeightClass, className)}
       aria-label={title ? `${title} embed` : undefined}
     >
       {shouldRender ? (
         <div dangerouslySetInnerHTML={{ __html: html }} />
       ) : (
-        <div className="flex h-48 items-center justify-center text-sm text-white/60">
-          <span>作品预览加载中…</span>
+        <div className="flex h-full items-center justify-center text-sm text-white/60">
+          <span>{loadingText}</span>
         </div>
       )}
     </div>

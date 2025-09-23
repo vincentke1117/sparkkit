@@ -2,17 +2,20 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
+import { getUiCopy } from '@/lib/translations';
 import { LanguageToggle } from './LanguageToggle';
-
-const NAV_LINKS = [
-  { href: '/', label: '首页' },
-  { href: '/showcases', label: '灵感索引' },
-  { href: '/search', label: '搜索' },
-];
+import { useLanguage } from './LanguageProvider';
 
 export function SiteHeader() {
+  const { locale } = useLanguage();
   const pathname = usePathname();
+  const copy = getUiCopy(locale);
+
+  const navLinks = [
+    { href: '/', label: copy.nav.home },
+    { href: '/showcases', label: copy.nav.showcases },
+    { href: '/status', label: copy.nav.status },
+  ];
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-black/40 backdrop-blur">
@@ -21,8 +24,9 @@ export function SiteHeader() {
           SparkKit
         </Link>
         <nav className="hidden items-center gap-4 text-xs text-white/60 sm:flex">
-          {NAV_LINKS.map((link) => {
-            const isActive = pathname === link.href;
+          {navLinks.map((link) => {
+            const isActive =
+              pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
             return (
               <Link
                 key={link.href}

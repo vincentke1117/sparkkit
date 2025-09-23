@@ -6,15 +6,24 @@ import Link from 'next/link';
 import { formatDateReadable, getLocalizedText } from '@/lib/i18n';
 import { buildPenUrl } from '@/lib/url';
 import { ShowcaseRecord } from '@/lib/types';
+import { getUiCopy } from '@/lib/translations';
 
 import { useLanguage } from './LanguageProvider';
 import { TagList } from './TagList';
 
-function Thumbnail({ record, alt }: { record: ShowcaseRecord; alt: string }) {
+function Thumbnail({
+  record,
+  alt,
+  placeholder,
+}: {
+  record: ShowcaseRecord;
+  alt: string;
+  placeholder: string;
+}) {
   if (!record.thumbnail_url) {
     return (
       <div className="flex h-44 w-full items-center justify-center rounded-2xl bg-gradient-to-br from-accent/20 to-accentSecondary/20 text-sm text-white/70">
-        <span>Preview coming soon</span>
+        <span>{placeholder}</span>
       </div>
     );
   }
@@ -36,7 +45,8 @@ function Thumbnail({ record, alt }: { record: ShowcaseRecord; alt: string }) {
 
 export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
   const { locale } = useLanguage();
-  const title = getLocalizedText(record, 'title', locale) ?? 'Untitled pen';
+  const copy = getUiCopy(locale);
+  const title = getLocalizedText(record, 'title', locale) ?? copy.cards.untitled;
   const summary = getLocalizedText(record, 'summary', locale);
   const publishedAt = formatDateReadable(record.created_at, locale);
   const penUrl = buildPenUrl(record);
@@ -44,13 +54,13 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
   return (
     <article className="group flex h-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 text-white transition-shadow duration-500 card-hover">
       <Link href={`/p/${record.pen_user}/${record.pen_slug}`} className="focus-outline flex flex-col gap-4">
-        <Thumbnail record={record} alt={title} />
+        <Thumbnail record={record} alt={title} placeholder={copy.cards.previewPlaceholder} />
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between text-xs text-white/70">
-            <span>{record.stack ?? 'Web'}</span>
+            <span>{record.stack ?? copy.cards.stackFallback}</span>
             {publishedAt ? <time dateTime={record.created_at ?? undefined}>{publishedAt}</time> : null}
           </div>
-          <h3 className="text-lg font-semibold text-gradient">{title}</h3>
+          <h3 className="text-lg font-semibold text-gradient">{title ?? copy.cards.untitled}</h3>
           {summary ? <p className="text-sm leading-relaxed text-white/80">{summary}</p> : null}
         </div>
       </Link>
@@ -65,7 +75,7 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
             className="focus-outline neon-border inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/90 transition"
           >
             <span aria-hidden>↗</span>
-            <span>CodePen</span>
+            <span>{copy.cards.openCodePen}</span>
           </a>
         </div>
       </div>

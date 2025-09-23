@@ -2,6 +2,8 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState, FormEvent, useEffect } from 'react';
+import { getUiCopy } from '@/lib/translations';
+import { useLanguage } from './LanguageProvider';
 
 const PAGE_SIZE = 12;
 
@@ -15,6 +17,8 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { locale } = useLanguage();
+  const copy = getUiCopy(locale);
 
   const initialTags = useMemo(() => new Set(searchParams.getAll('tags')), [searchParams]);
 
@@ -75,11 +79,11 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
     <form
       onSubmit={handleSubmit}
       className="glass-panel flex flex-col gap-6 rounded-3xl p-6 text-sm text-white/80"
-      aria-label="Showcase filters"
+      aria-label={copy.filters.ariaLabel}
     >
       <div className="flex flex-col gap-2">
         <label htmlFor="query" className="text-xs font-semibold uppercase tracking-widest text-white/60">
-          关键词
+          {copy.filters.keywordLabel}
         </label>
         <input
           id="query"
@@ -87,20 +91,20 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="搜索标题、摘要或解读..."
+          placeholder={copy.filters.keywordPlaceholder}
           className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/40"
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-widest text-white/60">
-          Stack
+          {copy.filters.stackLabel}
           <select
             value={stack}
             onChange={(event) => setStack(event.target.value)}
             className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white"
           >
-            <option value="">全部</option>
+            <option value="">{copy.filters.allOption}</option>
             {stacks.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -110,13 +114,13 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
         </label>
 
         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-widest text-white/60">
-          难度
+          {copy.filters.difficultyLabel}
           <select
             value={difficulty}
             onChange={(event) => setDifficulty(event.target.value)}
             className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white"
           >
-            <option value="">全部</option>
+            <option value="">{copy.filters.allOption}</option>
             {difficulties.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -127,7 +131,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
       </div>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="text-xs font-semibold uppercase tracking-widest text-white/60">标签</legend>
+        <legend className="text-xs font-semibold uppercase tracking-widest text-white/60">{copy.filters.tagsLabel}</legend>
         <div className="flex flex-wrap gap-2">
           {availableTags.map((tag) => {
             const checked = selectedTags.has(tag);
@@ -152,9 +156,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
               </label>
             );
           })}
-          {availableTags.length === 0 ? (
-            <span className="text-white/40">暂无标签</span>
-          ) : null}
+          {availableTags.length === 0 ? <span className="text-white/40">{copy.filters.noTags}</span> : null}
         </div>
       </fieldset>
 
@@ -163,14 +165,14 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
           type="submit"
           className="neon-border focus-outline inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white"
         >
-          应用筛选
+          {copy.filters.apply}
         </button>
         <button
           type="button"
           onClick={handleReset}
           className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm text-white/70 hover:border-accent/60 hover:text-white"
         >
-          重置
+          {copy.filters.reset}
         </button>
       </div>
     </form>

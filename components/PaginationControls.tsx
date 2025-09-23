@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import { PAGE_SIZE } from './ShowcaseFilters';
+import { getUiCopy } from '@/lib/translations';
+import { useLanguage } from './LanguageProvider';
 
 export function PaginationControls({
   hasNext,
@@ -16,6 +18,8 @@ export function PaginationControls({
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { locale } = useLanguage();
+  const copy = getUiCopy(locale);
 
   const prevParams = new URLSearchParams(searchParams.toString());
   prevParams.set('page', Math.max(1, currentPage - 1).toString());
@@ -30,9 +34,7 @@ export function PaginationControls({
       className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-white/70"
       aria-label="Pagination"
     >
-      <div>
-        第 {currentPage} 页 · 每页 {PAGE_SIZE} 条
-      </div>
+      <div>{copy.pagination.pageStatus(currentPage, PAGE_SIZE)}</div>
       <div className="flex items-center gap-2">
         <Link
           aria-disabled={disablePrev}
@@ -44,7 +46,7 @@ export function PaginationControls({
               : 'border-white/20 text-white/70 hover:border-accent/60 hover:text-white'
           }`}
         >
-          上一页
+          {copy.pagination.previous}
         </Link>
         <Link
           aria-disabled={disableNext}
@@ -56,7 +58,7 @@ export function PaginationControls({
               : 'border-white/20 text-white/70 hover:border-accent/60 hover:text-white'
           }`}
         >
-          下一页
+          {copy.pagination.next}
         </Link>
       </div>
     </nav>
