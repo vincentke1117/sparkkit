@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
-
 import { ShowcaseExplorer, ShowcaseExplorerFallback } from '@/components/ShowcaseExplorer';
 import { PAGE_SIZE } from '@/components/ShowcaseFilters';
 import { fetchDistinctFilters, fetchShowcases } from '@/lib/supabase';

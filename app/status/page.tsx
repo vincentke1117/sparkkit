@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
-
 import { fetchSyncStatus } from '@/lib/supabase';
 import { formatDateReadable } from '@/lib/i18n';
 import { getDefaultLocale, getSiteUrl } from '@/lib/site';
-
 export const revalidate = 300; // 5 minutes
 
 export const metadata: Metadata = {
