@@ -2,14 +2,13 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
-
 import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 import { OEmbedFrame } from '@/components/OEmbedFrame';
 import { TagList } from '@/components/TagList';
-import { formatDateReadable, getLocalizedList, getLocalizedText, resolveInitialLocale } from '@/lib/i18n';
-import { fetchShowcaseByUserAndSlug } from '@/lib/supabase';
+import { formatDateReadable, getLocalizedList, getLocalizedText } from '@/lib/i18n';
+import { fetchShowcaseByUserAndSlug, fetchShowcases } from '@/lib/supabase';
 import { buildPenUrl } from '@/lib/url';
+import { getDefaultLocale, getOgImageUrl, getSiteUrl } from '@/lib/site';
 
 export const revalidate = 600; // 10 minutes
 
@@ -30,8 +29,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const title = getLocalizedText(record, 'title', 'zh') ?? `${record.pen_user}/${record.pen_slug}`;
   const summary =
     getLocalizedText(record, 'summary', 'zh') ?? 'Discover CodePen inspiration curated by SparkKit with bilingual insights.';
-  const canonical = `https://sparkkit.dev/p/${record.pen_user}/${record.pen_slug}`;
-  const image = record.thumbnail_url ?? 'https://sparkkit.dev/og-cover.png';
+  const detailPath = `/p/${record.pen_user}/${record.pen_slug}`;
+  const canonical = getSiteUrl(detailPath);
+  const image = record.thumbnail_url ?? getOgImageUrl();
   const publishedTime = record.created_at ?? undefined;
 
   return {
@@ -78,7 +78,7 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
     notFound();
   }
 
-  const locale = resolveInitialLocale(headers().get('accept-language'));
+  const locale = getDefaultLocale();
   const title = getLocalizedText(record, 'title', locale) ?? `${record.pen_user}/${record.pen_slug}`;
   const summary = getLocalizedText(record, 'summary', locale);
   const headline = getLocalizedText(record, 'headline', locale);
@@ -88,7 +88,7 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
   const perfNotes = getLocalizedText(record, 'perf', locale);
   const penUrl = buildPenUrl(record);
   const publishedAt = formatDateReadable(record.created_at ?? record.updated_at, locale);
-  const canonical = `https://sparkkit.dev/p/${record.pen_user}/${record.pen_slug}`;
+  const canonical = getSiteUrl(`/p/${record.pen_user}/${record.pen_slug}`);
   const creativeWork = {
     '@type': 'CreativeWork',
     name: title,
@@ -114,13 +114,13 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
         '@type': 'ListItem',
         position: 1,
         name: '首页',
-        item: 'https://sparkkit.dev',
+        item: getSiteUrl(),
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: '作品列表',
-        item: 'https://sparkkit.dev/showcases',
+        item: getSiteUrl('/showcases'),
       },
       {
         '@type': 'ListItem',
@@ -251,4 +251,9 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
       ) : null}
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  const showcases = await fetchShowcases({ limit: 5000 });
+  return showcases.map((item) => ({ user: item.pen_user, slug: item.pen_slug }));
 }

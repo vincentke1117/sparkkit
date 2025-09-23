@@ -3,18 +3,20 @@ import { NextResponse } from 'next/server';
 import { fetchShowcases } from '@/lib/supabase';
 import { getLocalizedText } from '@/lib/i18n';
 import { buildPenUrl } from '@/lib/url';
+import { getSiteUrl } from '@/lib/site';
 
 export const revalidate = 21600; // 6 hours
+export const dynamic = 'force-static';
 
 export async function GET() {
-  const baseUrl = 'https://sparkkit.dev';
+  const baseUrl = getSiteUrl();
   const showcases = await fetchShowcases({ limit: 100 });
 
   const items = showcases
     .map((item) => {
       const title = getLocalizedText(item, 'title', 'zh') ?? `${item.pen_user}/${item.pen_slug}`;
       const summary = getLocalizedText(item, 'summary', 'zh') ?? '';
-      const url = `${baseUrl}/p/${item.pen_user}/${item.pen_slug}`;
+      const url = getSiteUrl(`/p/${item.pen_user}/${item.pen_slug}`);
       const original = buildPenUrl(item);
       const pubDate = item.created_at ? new Date(item.created_at).toUTCString() : new Date().toUTCString();
       return `<item>

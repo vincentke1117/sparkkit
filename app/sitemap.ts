@@ -1,11 +1,12 @@
 import type { MetadataRoute } from 'next';
 
 import { fetchShowcases } from '@/lib/supabase';
+import { getSiteUrl } from '@/lib/site';
 
 export const revalidate = 86400; // regenerate daily
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://sparkkit.dev';
+  const baseUrl = getSiteUrl();
   const showcases = await fetchShowcases({ limit: 5000 });
 
   const staticEntries: MetadataRoute.Sitemap = [

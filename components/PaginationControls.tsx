@@ -5,7 +5,15 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 import { PAGE_SIZE } from './ShowcaseFilters';
 
-export function PaginationControls({ hasNext, currentPage }: { hasNext: boolean; currentPage: number }) {
+export function PaginationControls({
+  hasNext,
+  currentPage,
+  isLoading = false,
+}: {
+  hasNext: boolean;
+  currentPage: number;
+  isLoading?: boolean;
+}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -14,8 +22,8 @@ export function PaginationControls({ hasNext, currentPage }: { hasNext: boolean;
   const nextParams = new URLSearchParams(searchParams.toString());
   nextParams.set('page', (currentPage + 1).toString());
 
-  const disablePrev = currentPage <= 1;
-  const disableNext = !hasNext;
+  const disablePrev = currentPage <= 1 || isLoading;
+  const disableNext = !hasNext || isLoading;
 
   return (
     <nav

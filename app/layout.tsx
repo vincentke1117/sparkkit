@@ -1,13 +1,16 @@
 import '@/app/globals.css';
 
 import type { Metadata, Viewport } from 'next';
-import { headers } from 'next/headers';
 
 import { LanguageProvider } from '@/components/LanguageProvider';
-import { resolveInitialLocale } from '@/lib/i18n';
+import { getDefaultLocale, getOgImageUrl, getSiteUrl } from '@/lib/site';
+
+const siteUrl = getSiteUrl();
+const ogImageUrl = getOgImageUrl();
+const defaultLocale = getDefaultLocale();
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sparkkit.dev'),
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'SparkKit · Inspire · Decode · Reuse',
     template: '%s · SparkKit',
@@ -15,11 +18,11 @@ export const metadata: Metadata = {
   description:
     'SparkKit curates standout CodePen experiments with bilingual insights, reusable steps, and performance notes pulled from Supabase.',
   alternates: {
-    canonical: 'https://sparkkit.dev',
+    canonical: siteUrl,
     languages: {
-      'en-US': 'https://sparkkit.dev',
-      'zh-CN': 'https://sparkkit.dev?hl=zh-cn',
-      'x-default': 'https://sparkkit.dev',
+      'en-US': siteUrl,
+      'zh-CN': getSiteUrl('/?hl=zh-cn'),
+      'x-default': siteUrl,
     },
   },
   openGraph: {
@@ -27,11 +30,11 @@ export const metadata: Metadata = {
     title: 'SparkKit · Inspire · Decode · Reuse',
     description:
       'Discover CodePen masterpieces backed by Supabase with deep-dives, multilingual summaries, and ready-to-reuse steps.',
-    url: 'https://sparkkit.dev',
+    url: siteUrl,
     siteName: 'SparkKit',
     images: [
       {
-        url: 'https://sparkkit.dev/og-cover.png',
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: 'SparkKit — Inspire · Decode · Reuse',
@@ -45,7 +48,7 @@ export const metadata: Metadata = {
     title: 'SparkKit · Inspire · Decode · Reuse',
     description:
       'Curated CodePen showcases with bilingual analysis, tags, and performance notes delivered from Supabase.',
-    images: ['https://sparkkit.dev/og-cover.png'],
+    images: [ogImageUrl],
   },
   icons: {
     icon: '/favicon.ico',
@@ -57,24 +60,22 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const acceptLanguage = headers().get('accept-language');
-  const locale = resolveInitialLocale(acceptLanguage);
   const websiteJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'SparkKit',
-    url: 'https://sparkkit.dev',
+    url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://sparkkit.dev/search?q={search_term_string}',
+      target: getSiteUrl('/search?q={search_term_string}'),
       'query-input': 'required name=search_term_string',
     },
   };
 
   return (
-    <html lang={locale === 'zh' ? 'zh-CN' : 'en'}>
+    <html lang={defaultLocale === 'zh' ? 'zh-CN' : 'en'}>
       <body className="relative min-h-screen bg-[--spark-background] text-white antialiased">
-        <LanguageProvider defaultLocale={locale}>
+        <LanguageProvider defaultLocale={defaultLocale}>
           <script
             type="application/ld+json"
             suppressHydrationWarning

@@ -10,7 +10,7 @@ SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展
 - **详情页 `/p/[user]/[slug]`**：标题 / 作者 / 原链 / 缩略图 / 多语言解读 / 复用步骤 / 性能提示 / 懒加载 oEmbed。缺少内容时提供 CodePen CTA。
 - **状态页 `/status`**：展示版本号、最近同步时间、已索引数量与缓存命中率描述。
 - **Sitemap & RSS**：`/sitemap.xml`（最近 5000 条，日更）与 `/rss.xml`（最近 100 条，6 小时刷新）。
-- **多语言容错**：按 `navigator.language` 与 `Accept-Language` 自动挑选 `*_zh` 优先，其次 `*_en`，字段缺失时回退。
+- **多语言容错**：以 `NEXT_PUBLIC_DEFAULT_LOCALE` 作为 SSR 回退，客户端监听 `navigator.language` 自动切换；字段缺失时在中英间回退。
 - **可访问性**：键盘焦点环、≥4.5:1 对比度、`alt` 占位与 `prefers-reduced-motion` 友好动效。
 - **结构化数据**：全站注入 `WebSite + SearchAction` JSON-LD；详情页额外输出 `CreativeWork + BreadcrumbList`，并设置 canonical / hreflang / OG / Twitter 卡片。
 
@@ -52,8 +52,11 @@ SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- （可选）`NEXT_PUBLIC_SUPABASE_TABLE`（默认 `codepen_showcases`）
+- （可选）`NEXT_PUBLIC_SUPABASE_TABLE`（默认 `frontend_showcase`）
 - （可选）`NEXT_PUBLIC_SUPABASE_STATUS_VIEW`（默认 `showcase_sync_status`）
+- （可选）`NEXT_PUBLIC_SITE_URL`（默认 `https://sparkkit.dev`，GitHub Pages / CDN 自定义域需填写完整 URL）
+- （可选）`NEXT_PUBLIC_BASE_PATH`（如部署在子路径，例如 `/sparkkit`）
+- （可选）`NEXT_PUBLIC_DEFAULT_LOCALE`（`zh` 或 `en`，控制 SSR 默认语言）
 
 ## 本地开发
 
@@ -63,6 +66,42 @@ npm run dev
 ```
 
 运行后访问 `http://localhost:3000`，若未配置 Supabase 凭据则自动使用示例数据。
+
+执行 `npm run build` 会在 `out/` 目录产出可部署的静态站点（App Router + `output: export`），适用于 GitHub Pages 等静态托管。
+
+### 使用示例 Supabase（可选）
+
+如需连通真实数据，可在本地 `.env.local` 中写入以下只读凭据：
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://cvfsxwzgcadnfavthonp.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_QyN33bNy2sozJxcM8SDciw_IPUW7MoA
+```
+
+默认会读取 `public.frontend_showcase` 表，若后续调整可通过 `NEXT_PUBLIC_SUPABASE_TABLE` 覆写。
+
+## GitHub Pages 部署指引
+
+1. 在仓库 Settings → Pages 中选择 GitHub Actions 作为发布来源，或手动创建 `gh-pages` 分支。
+2. 在仓库 Secrets / Variables 中新增：
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - （可选）`NEXT_PUBLIC_SITE_URL`：如 `https://<username>.github.io/<repo>`。
+   - （可选）`NEXT_PUBLIC_BASE_PATH`：对应 `<repo>` 子路径（形如 `sparkkit`）。
+   - （可选）`NEXT_PUBLIC_DEFAULT_LOCALE`：默认语言。
+3. 在 CI 中执行：
+
+```bash
+npm ci
+npm run build
+```
+
+构建完成后会得到 `out/` 目录，可通过：
+
+- GitHub Actions `actions/upload-pages-artifact` 上传后使用 `actions/deploy-pages` 发布；或
+- 手动将 `out/` 推送到 `gh-pages` 分支（需包含 `404.html` 以兼容 SPA 路由）。
+
+若站点使用自定义域名，只需在 DNS 与 GitHub Pages 设置中指向域名，同时将 `NEXT_PUBLIC_SITE_URL` 更新为新域，缓存刷新逻辑保持不变。
 
 ## GitHub Actions 执行说明（无代码）
 

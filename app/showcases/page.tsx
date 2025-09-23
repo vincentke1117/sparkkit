@@ -1,10 +1,9 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
-
-import { PaginationControls } from '@/components/PaginationControls';
-import { ShowcaseCard } from '@/components/ShowcaseCard';
-import { ShowcaseFilters, PAGE_SIZE } from '@/components/ShowcaseFilters';
+import { ShowcaseExplorer, ShowcaseExplorerFallback } from '@/components/ShowcaseExplorer';
+import { PAGE_SIZE } from '@/components/ShowcaseFilters';
 import { fetchDistinctFilters, fetchShowcases } from '@/lib/supabase';
+import { getSiteUrl } from '@/lib/site';
 
 export const revalidate = 900; // 15 minutes
 
@@ -12,49 +11,18 @@ export const metadata: Metadata = {
   title: '作品列表',
   description: '浏览 SparkKit 精选的 CodePen 作品，按关键词、标签、Stack 与难度筛选。',
   alternates: {
-    canonical: 'https://sparkkit.dev/showcases',
+    canonical: getSiteUrl('/showcases'),
     languages: {
-      'en-US': 'https://sparkkit.dev/showcases',
-      'zh-CN': 'https://sparkkit.dev/showcases?hl=zh-cn',
-      'x-default': 'https://sparkkit.dev/showcases',
+      'en-US': getSiteUrl('/showcases'),
+      'zh-CN': getSiteUrl('/showcases?hl=zh-cn'),
+      'x-default': getSiteUrl('/showcases'),
     },
   },
 };
 
-type SearchParams = {
-  q?: string;
-  tags?: string | string[];
-  stack?: string;
-  difficulty?: string;
-  page?: string;
-};
-
-function parseTags(tags: SearchParams['tags']): string[] {
-  if (!tags) {
-    return [];
-  }
-
-  if (Array.isArray(tags)) {
-    return tags;
-  }
-
-  return [tags];
-}
-
-export default async function ShowcasesPage({ searchParams }: { searchParams: SearchParams }) {
-  const page = Number.parseInt(searchParams.page ?? '1', 10) || 1;
-  const offset = (page - 1) * PAGE_SIZE;
-  const tags = parseTags(searchParams.tags);
-
+export default async function ShowcasesPage() {
   const [showcasesRaw, filters] = await Promise.all([
-    fetchShowcases({
-      query: searchParams.q,
-      tags,
-      stack: searchParams.stack,
-      difficulty: searchParams.difficulty,
-      limit: PAGE_SIZE + 1,
-      offset,
-    }),
+    fetchShowcases({ limit: PAGE_SIZE + 1 }),
     fetchDistinctFilters(),
   ]);
 
@@ -73,37 +41,17 @@ export default async function ShowcasesPage({ searchParams }: { searchParams: Se
         </p>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[320px,1fr] lg:items-start">
-        <ShowcaseFilters
-          availableTags={filters.tags}
-          stacks={filters.stacks}
-          difficulties={filters.difficulties}
+      <Suspense
+        fallback={
+          <ShowcaseExplorerFallback filterOptions={{ availableTags: filters.tags, stacks: filters.stacks, difficulties: filters.difficulties }} />
+        }
+      >
+        <ShowcaseExplorer
+          initialRecords={showcases}
+          initialHasNext={hasNext}
+          filterOptions={{ availableTags: filters.tags, stacks: filters.stacks, difficulties: filters.difficulties }}
         />
-
-        <section className="flex flex-col gap-6">
-          {showcases.length === 0 ? (
-            <div className="glass-panel flex flex-col items-center gap-3 rounded-3xl p-12 text-center text-white/70">
-              <h2 className="text-lg font-semibold text-white">暂无结果</h2>
-              <p>调整筛选条件或尝试不同关键词。</p>
-              <Link
-                href="/showcases"
-                className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-xs uppercase tracking-wide text-white/70 hover:border-accent/60 hover:text-white"
-              >
-                重置筛选
-              </Link>
-            </div>
-          ) : (
-            <>
-              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {showcases.map((showcase) => (
-                  <ShowcaseCard key={showcase.id} record={showcase} />
-                ))}
-              </div>
-              <PaginationControls hasNext={hasNext} currentPage={page} />
-            </>
-          )}
-        </section>
-      </div>
+      </Suspense>
     </div>
   );
 }

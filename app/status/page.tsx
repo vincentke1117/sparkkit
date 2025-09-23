@@ -1,27 +1,25 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-
 import { fetchSyncStatus } from '@/lib/supabase';
-import { formatDateReadable, resolveInitialLocale } from '@/lib/i18n';
-
+import { formatDateReadable } from '@/lib/i18n';
+import { getDefaultLocale, getSiteUrl } from '@/lib/site';
 export const revalidate = 300; // 5 minutes
 
 export const metadata: Metadata = {
   title: '运行状态',
   description: '查看 SparkKit 的版本、最近同步时间、已索引条目与缓存表现。',
   alternates: {
-    canonical: 'https://sparkkit.dev/status',
+    canonical: getSiteUrl('/status'),
     languages: {
-      'en-US': 'https://sparkkit.dev/status',
-      'zh-CN': 'https://sparkkit.dev/status?hl=zh-cn',
-      'x-default': 'https://sparkkit.dev/status',
+      'en-US': getSiteUrl('/status'),
+      'zh-CN': getSiteUrl('/status?hl=zh-cn'),
+      'x-default': getSiteUrl('/status'),
     },
   },
 };
 
 export default async function StatusPage() {
   const status = await fetchSyncStatus();
-  const locale = resolveInitialLocale(headers().get('accept-language'));
+  const locale = getDefaultLocale();
   const syncedAt = formatDateReadable(status.lastSyncedAt, locale);
 
   return (
