@@ -74,18 +74,6 @@ export function ShowcaseExplorer({
 
   useEffect(() => {
     const filters = parseSearchParams(searchParams, pageSize);
-    const isDefaultQuery =
-      (!filters.query || filters.query.trim().length === 0) &&
-      (!filters.stack || filters.stack.trim().length === 0) &&
-      (!filters.difficulty || filters.difficulty.trim().length === 0) &&
-      (filters.tags?.length ?? 0) === 0 &&
-      (filters.offset ?? 0) === 0;
-
-    if (isDefaultQuery) {
-      setState({ records: initialRecords, hasNext: initialHasNext, loading: false });
-      return;
-    }
-
     let cancelled = false;
     setState((prev) => ({ ...prev, loading: true }));
 

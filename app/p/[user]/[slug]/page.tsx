@@ -73,6 +73,7 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
   if (!record) {
     notFound();
   }
+
   const canonical = getSiteUrl(`/p/${record.pen_user}/${record.pen_slug}`);
   const penUrl = buildPenUrl(record);
   const creativeWork = {
@@ -129,6 +130,7 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
     '@context': 'https://schema.org',
     '@graph': [creativeWork, breadcrumbs],
   };
+
   return <ShowcaseDetail record={record} jsonLd={jsonLd} canonical={canonical} />;
 }
 

@@ -120,15 +120,30 @@ a {
 .oembed-frame {
   position: relative;
   overflow: hidden;
+  display: grid;
+}
+
+.oembed-frame > * {
+  grid-area: 1 / 1;
+  width: 100%;
+}
+
+.oembed-frame[data-has-aspect='true'] > * {
+  height: 100%;
 }
 
 .oembed-frame iframe,
 .oembed-frame embed,
 .oembed-frame object {
   width: 100% !important;
-  height: 100% !important;
   min-height: inherit;
   border: 0 !important;
   border-radius: 24px !important;
   display: block;
+}
+
+.oembed-frame[data-has-aspect='true'] iframe,
+.oembed-frame[data-has-aspect='true'] embed,
+.oembed-frame[data-has-aspect='true'] object {
+  height: 100% !important;
 }

@@ -11,6 +11,69 @@ type OEmbedFrameProps = {
   loadingText: string;
 };
 
+function parsePixelValue(value: string | null | undefined): number | null {
+  if (!value) {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  if (trimmed.endsWith('%') || trimmed.startsWith('calc(')) {
+    return null;
+  }
+
+  const match = trimmed.match(/([0-9]+(?:\.[0-9]+)?)/);
+  if (!match) {
+    return null;
+  }
+
+  const numeric = Number.parseFloat(match[1]);
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    return null;
+  }
+
+  return numeric;
+}
+
+function readDimension(element: HTMLElement, dimension: 'width' | 'height'): number | null {
+  const direct = parsePixelValue(element.getAttribute(dimension));
+  if (direct) {
+    return direct;
+  }
+
+  const dataAttr = parsePixelValue(element.getAttribute(`data-${dimension}`));
+  if (dataAttr) {
+    return dataAttr;
+  }
+
+  const datasetKey = dimension === 'width' ? 'width' : 'height';
+  const datasetValue = parsePixelValue(element.dataset[datasetKey]);
+  if (datasetValue) {
+    return datasetValue;
+  }
+
+  const inlineStyleValue = element.style.getPropertyValue(dimension);
+  const inline = parsePixelValue(inlineStyleValue);
+  if (inline) {
+    return inline;
+  }
+
+  const styleAttr = element.getAttribute('style');
+  if (styleAttr) {
+    const regex = new RegExp(`${dimension}\\s*:\\s*([^;]+)`, 'i');
+    const styleMatch = styleAttr.match(regex);
+    const styleValue = parsePixelValue(styleMatch?.[1]);
+    if (styleValue) {
+      return styleValue;
+    }
+  }
+
+  return null;
+}
+
 export function OEmbedFrame({
   html,
   title,
@@ -59,19 +122,81 @@ export function OEmbedFrame({
       return;
     }
 
-    const embeds = container.querySelectorAll('iframe, embed, object');
+    const embeds = Array.from(container.querySelectorAll<HTMLElement>('iframe, embed, object'));
+
+    if (embeds.length === 0) {
+      container.style.removeProperty('--oembed-min-height');
+      container.style.removeProperty('min-height');
+      container.style.removeProperty('--oembed-aspect-ratio');
+      container.style.removeProperty('aspect-ratio');
+      delete container.dataset.hasAspect;
+      return;
+    }
+
+    let inferredHeight: number | null = null;
+    let inferredWidth: number | null = null;
+
     embeds.forEach((element) => {
-      const target = element as HTMLElement;
-      target.removeAttribute('width');
-      target.removeAttribute('height');
-      target.style.width = '100%';
-      target.style.height = '100%';
-      target.style.minHeight = 'inherit';
-      target.style.display = 'block';
-      target.style.border = '0';
-      target.style.borderRadius = '24px';
+      if (inferredHeight === null) {
+        inferredHeight = readDimension(element, 'height');
+      }
+      if (inferredWidth === null) {
+        inferredWidth = readDimension(element, 'width');
+      }
     });
-  }, [shouldRender]);
+
+    if (!inferredHeight) {
+      const rect = embeds[0].getBoundingClientRect();
+      if (Number.isFinite(rect.height) && rect.height > 0) {
+        inferredHeight = rect.height;
+      }
+    }
+
+    const aspectRatio = inferredWidth && inferredHeight ? inferredWidth / inferredHeight : null;
+
+    embeds.forEach((element) => {
+      element.removeAttribute('width');
+      element.removeAttribute('height');
+      element.style.width = '100%';
+      element.style.display = 'block';
+      element.style.border = '0';
+      element.style.borderRadius = '24px';
+
+      if (aspectRatio && Number.isFinite(aspectRatio) && aspectRatio > 0) {
+        element.style.height = '100%';
+        element.style.minHeight = '100%';
+      } else if (inferredHeight) {
+        const heightPx = `${Math.round(inferredHeight)}px`;
+        element.style.height = heightPx;
+        element.style.minHeight = heightPx;
+      } else {
+        element.style.height = '100%';
+        element.style.minHeight = 'inherit';
+      }
+    });
+
+    if (aspectRatio && Number.isFinite(aspectRatio) && aspectRatio > 0 && inferredWidth && inferredHeight) {
+      const widthValue = Math.max(Math.round(inferredWidth), 1);
+      const heightValue = Math.max(Math.round(inferredHeight), 1);
+      const ratioValue = `${widthValue} / ${heightValue}`;
+      container.dataset.hasAspect = 'true';
+      container.style.setProperty('--oembed-aspect-ratio', ratioValue);
+      container.style.setProperty('aspect-ratio', ratioValue);
+    } else {
+      delete container.dataset.hasAspect;
+      container.style.removeProperty('--oembed-aspect-ratio');
+      container.style.removeProperty('aspect-ratio');
+    }
+
+    if (inferredHeight) {
+      const heightPx = `${Math.round(inferredHeight)}px`;
+      container.style.setProperty('--oembed-min-height', heightPx);
+      container.style.minHeight = heightPx;
+    } else {
+      container.style.removeProperty('--oembed-min-height');
+      container.style.removeProperty('min-height');
+    }
+  }, [shouldRender, html]);
 
   return (
     <div
