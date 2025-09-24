@@ -122,7 +122,6 @@ function selectDailyFeatured(records: ShowcaseRecord[]): ShowcaseRecord[] {
 
   return shuffled.slice(0, FEATURED_COUNT_PER_TIER * 2);
 }
-
 type HomeLandingProps = {
   showcases: ShowcaseRecord[];
   showDevNote?: boolean;

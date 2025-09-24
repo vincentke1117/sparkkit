@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { clsx } from 'clsx';
 
 import { useLanguage } from './LanguageProvider';
-
 type OEmbedFrameProps = {
   html: string;
   title?: string;
@@ -15,7 +14,6 @@ type OEmbedFrameProps = {
 
 const EMBED_HEIGHT_MULTIPLIER = 2;
 const EMBED_FALLBACK_MIN_HEIGHT = 640;
-
 function parsePixelValue(value: string | null | undefined): number | null {
   if (!value) {
     return null;

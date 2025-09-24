@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-
 import { ShowcaseExplorerFallback } from '@/components/ShowcaseExplorer';
 import { PAGE_SIZE } from '@/components/ShowcaseFilters';
 import { ShowcasesPageShell } from '@/components/ShowcasesPageShell';

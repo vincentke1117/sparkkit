@@ -2,9 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
 import { getUiCopy } from '@/lib/translations';
-
 import { LanguageToggle } from './LanguageToggle';
 import { useLanguage } from './LanguageProvider';
 
