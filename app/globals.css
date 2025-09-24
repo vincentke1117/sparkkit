@@ -117,6 +117,15 @@ a {
   background: linear-gradient(135deg, var(--spark-accent), var(--spark-accent-secondary));
 }
 
+.tag-pill--light {
+  background: rgba(17, 24, 39, 0.08);
+  border-color: rgba(17, 24, 39, 0.16);
+  color: rgba(15, 23, 42, 0.75);
+}
+
+.tag-pill--light::before {
+  background: linear-gradient(135deg, rgba(111, 155, 255, 0.9), rgba(212, 224, 255, 0.9));
+}
 .oembed-frame {
   position: relative;
   overflow: hidden;

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { clsx } from 'clsx';
 
+import { useLanguage } from './LanguageProvider';
 type OEmbedFrameProps = {
   html: string;
   title?: string;
@@ -85,6 +86,7 @@ export function OEmbedFrame({
 }: OEmbedFrameProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [shouldRender, setShouldRender] = useState(false);
+  const { locale } = useLanguage();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -198,7 +200,7 @@ export function OEmbedFrame({
     const heightPx = `${Math.round(targetHeight)}px`;
     container.style.setProperty('--oembed-min-height', heightPx);
     container.style.minHeight = heightPx;
-  }, [shouldRender, html]);
+  }, [shouldRender, html, locale]);
 
   return (
     <div

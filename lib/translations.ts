@@ -128,7 +128,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       strapline: 'Inspire · Decode · Reuse',
       heroTitle: 'Curated CodePen inspiration with bilingual deep dives',
       heroDescription:
-        'SparkKit streams fresh showcases from Supabase and turns them into structured, bilingual breakdowns. Mobile-first SSR and ISR keep every idea indexable and ready to reuse.',
+        'SparkKit celebrates imaginative front-end experiments and shares bilingual storylines that distill reuse-ready insights for makers.',
       directoryCta: 'Open showcase index',
       features: [
         {
@@ -145,7 +145,8 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
         },
       ],
       featuredTitle: "Today's Picks",
-      featuredDescription: 'The freshest six showcases from Supabase. Auto-refreshes with each sync.',
+      featuredDescription:
+        'Six daily picks — three advanced and three intermediate — refreshed every morning at 08:00 Beijing time (UTC+8).',
       viewAll: 'View entire gallery',
       collapse: 'Collapse gallery',
       masonryHint: 'Scroll to explore the full waterfall layout.',
@@ -203,7 +204,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       strapline: 'Showcases',
       title: 'Showcase Index',
       description:
-        'Filter the Supabase-powered showcase library by keyword, tags, stack, and difficulty. Incremental regeneration keeps the list fresh every 15 minutes.',
+        'Explore the curated showcase library with keyword, tag, stack, and difficulty filters. Fresh updates land daily, pairing each entry with SEO-focused metadata to stay discoverable.',
       returnHome: '← Back home',
     },
     status: {
@@ -245,9 +246,9 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
-      heroTitle: '精选 CodePen 灵感，双语深度解析随时复用',
+      heroTitle: '精选 CodePen 灵感，深度解析随时复用',
       heroDescription:
-        'SparkKit 从 Supabase 实时拉取作品，转化为结构化的双语解读。移动优先的 SSR + ISR 让灵感随时可索引、可复用。',
+        'SparkKit 聚焦前端实验灵感，以深度解析提炼亮点与复用价值，陪你把灵感延展成作品。',
       directoryCta: '打开灵感索引',
       features: [
         {
@@ -264,7 +265,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
         },
       ],
       featuredTitle: '今日精选',
-      featuredDescription: '来自 Supabase 的最新 6 条作品，随每次同步自动刷新。',
+      featuredDescription: '每日精选 6 条作品（高级 3 条 + 进阶 3 条），每天北京时间 08:00 自动更新。',
       viewAll: '展开全部',
       collapse: '收起',
       masonryHint: '滚动浏览艺术化的瀑布流展示。',
@@ -321,7 +322,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       strapline: 'Showcases',
       title: '灵感索引',
       description:
-        '基于 Supabase 的灵感库，支持按关键词、标签、Stack 与难度组合筛选。列表每 15 分钟增量再生成，保持内容新鲜。',
+        '精选灵感索引支持按关键词、标签、Stack 与难度组合筛选。列表每日更新并附带 SEO 结构化信息，确保作品始终易于检索。',
       returnHome: '← 返回首页',
     },
     status: {
