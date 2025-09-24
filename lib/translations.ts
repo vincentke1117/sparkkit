@@ -90,6 +90,7 @@ type UiCopy = {
     openCodePen: string;
     untitled: string;
     stackFallback: string;
+    difficultyFallback: string;
   };
   filters: FilterCopy;
   explorer: {
@@ -157,6 +158,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       openCodePen: 'CodePen',
       untitled: 'Untitled pen',
       stackFallback: 'Web',
+      difficultyFallback: 'Unspecified',
     },
     filters: {
       ariaLabel: 'Showcase filters',
@@ -274,6 +276,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       openCodePen: 'CodePen',
       untitled: '未命名作品',
       stackFallback: 'Web',
+      difficultyFallback: '未标注',
     },
     filters: {
       ariaLabel: '作品筛选器',

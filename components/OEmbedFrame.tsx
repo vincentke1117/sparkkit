@@ -11,6 +11,8 @@ type OEmbedFrameProps = {
   loadingText: string;
 };
 
+const EMBED_HEIGHT_MULTIPLIER = 2;
+const EMBED_FALLBACK_MIN_HEIGHT = 640;
 function parsePixelValue(value: string | null | undefined): number | null {
   if (!value) {
     return null;
@@ -152,7 +154,12 @@ export function OEmbedFrame({
       }
     }
 
-    const aspectRatio = inferredWidth && inferredHeight ? inferredWidth / inferredHeight : null;
+    const baseHeight = inferredHeight && Number.isFinite(inferredHeight) ? inferredHeight : null;
+    const targetHeight = baseHeight
+      ? Math.max(Math.round(baseHeight * EMBED_HEIGHT_MULTIPLIER), Math.round(baseHeight), EMBED_FALLBACK_MIN_HEIGHT)
+      : EMBED_FALLBACK_MIN_HEIGHT;
+
+    const aspectRatio = inferredWidth ? inferredWidth / targetHeight : null;
 
     embeds.forEach((element) => {
       element.removeAttribute('width');
@@ -165,8 +172,8 @@ export function OEmbedFrame({
       if (aspectRatio && Number.isFinite(aspectRatio) && aspectRatio > 0) {
         element.style.height = '100%';
         element.style.minHeight = '100%';
-      } else if (inferredHeight) {
-        const heightPx = `${Math.round(inferredHeight)}px`;
+      } else if (targetHeight) {
+        const heightPx = `${Math.round(targetHeight)}px`;
         element.style.height = heightPx;
         element.style.minHeight = heightPx;
       } else {
@@ -175,9 +182,9 @@ export function OEmbedFrame({
       }
     });
 
-    if (aspectRatio && Number.isFinite(aspectRatio) && aspectRatio > 0 && inferredWidth && inferredHeight) {
+    if (aspectRatio && Number.isFinite(aspectRatio) && aspectRatio > 0 && inferredWidth) {
       const widthValue = Math.max(Math.round(inferredWidth), 1);
-      const heightValue = Math.max(Math.round(inferredHeight), 1);
+      const heightValue = Math.max(Math.round(targetHeight), 1);
       const ratioValue = `${widthValue} / ${heightValue}`;
       container.dataset.hasAspect = 'true';
       container.style.setProperty('--oembed-aspect-ratio', ratioValue);
@@ -188,14 +195,9 @@ export function OEmbedFrame({
       container.style.removeProperty('aspect-ratio');
     }
 
-    if (inferredHeight) {
-      const heightPx = `${Math.round(inferredHeight)}px`;
-      container.style.setProperty('--oembed-min-height', heightPx);
-      container.style.minHeight = heightPx;
-    } else {
-      container.style.removeProperty('--oembed-min-height');
-      container.style.removeProperty('min-height');
-    }
+    const heightPx = `${Math.round(targetHeight)}px`;
+    container.style.setProperty('--oembed-min-height', heightPx);
+    container.style.minHeight = heightPx;
   }, [shouldRender, html]);
 
   return (
