@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: '%s · SparkKit',
   },
   description:
-    'SparkKit curates standout CodePen experiments with bilingual insights, reusable steps, and performance notes pulled from Supabase.',
+    'SparkKit curates standout CodePen experiments with deep dives, reusable steps, and performance notes to help you ship faster.',
   alternates: {
     canonical: siteUrl,
     languages: {
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     type: 'website',
     title: 'SparkKit · Inspire · Decode · Reuse',
     description:
-      'Discover CodePen masterpieces backed by Supabase with deep-dives, multilingual summaries, and ready-to-reuse steps.',
+      'Discover CodePen masterpieces with deep dives, reuse checklists, and performance notes ready for rapid inspiration.',
     url: siteUrl,
     siteName: 'SparkKit',
     images: [
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     creator: '@sparkkit',
     title: 'SparkKit · Inspire · Decode · Reuse',
     description:
-      'Curated CodePen showcases with bilingual analysis, tags, and performance notes delivered from Supabase.',
+      'Curated CodePen showcases with deep-dive analysis, reusable steps, and performance notes ready to explore.',
     images: [ogImageUrl],
   },
   icons: {
@@ -88,7 +88,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SiteHeader />
             <main className="flex-1">{children}</main>
             <footer className="border-t border-white/10 bg-black/30 py-8 text-center text-xs text-white/60">
-              <p>© {new Date().getFullYear()} SparkKit · CodePen inspiration by VincentK.</p>
+            <p>© {new Date().getFullYear()} SparkKit · CodePen inspiration by VincentK.</p>
+
             </footer>
           </div>
         </LanguageProvider>

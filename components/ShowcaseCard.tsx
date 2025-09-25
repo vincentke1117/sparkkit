@@ -57,56 +57,65 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
   const difficulty = record.difficulty ?? copy.cards.difficultyFallback;
 
   return (
-    <article className="group flex h-full flex-col justify-between gap-4 overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-4 text-white transition-shadow duration-500 card-hover">
-      <Link
-        href={`/p/${record.pen_user}/${record.pen_slug}`}
-        className="focus-outline relative flex flex-1 flex-col"
-      >
-        <div className="relative h-full overflow-hidden rounded-2xl">
-          <Thumbnail
-            record={record}
-            alt={title}
-            placeholder={copy.cards.previewPlaceholder}
-            className="h-60"
-          />
-          <div
-            className="absolute inset-x-4 bottom-4 z-10 transition-all duration-500 ease-out [transform:translateY(calc(100%-6.5rem))] group-focus-within:[transform:translateY(0)] group-hover:[transform:translateY(0)]"
-          >
-            <div className="rounded-2xl bg-white/95 p-5 text-sm text-slate-700 shadow-2xl shadow-black/40 backdrop-blur">
-              <div className="flex items-center justify-between text-[0.7rem] uppercase tracking-wide text-slate-500">
-                <span>{difficulty}</span>
-                {publishedAt ? (
-                  <time dateTime={record.created_at ?? undefined}>{publishedAt}</time>
-                ) : null}
-              </div>
-              <h3 className="mt-3 text-lg font-semibold text-slate-900 transition-transform duration-500 group-hover:-translate-y-1 group-focus-within:-translate-y-1">
-                {title ?? copy.cards.untitled}
-              </h3>
-              {summary ? (
-                <p className="mt-3 translate-y-4 text-sm leading-relaxed text-slate-600 opacity-0 transition-all duration-500 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100">
-                  {summary}
-                </p>
-              ) : null}
-              <TagList
-                tags={record.tags ?? undefined}
-                variant="light"
-                className="mt-4 translate-y-4 opacity-0 transition-all duration-500 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
-              />
-            </div>
-          </div>
-        </div>
-      </Link>
-      <div className="flex items-center justify-between text-xs text-white/70">
-        <span className="text-sm font-medium text-white/90">{record.author_name ?? record.pen_user}</span>
-        <a
-          href={penUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="focus-outline neon-border inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs text-white/90 transition"
+    <article className="group relative flex h-full min-h-[24rem] flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950/50 text-white shadow-lg transition duration-500 hover:-translate-y-1 hover:shadow-glow">
+      <div className="absolute inset-0">
+        <Thumbnail
+          record={record}
+          alt={title}
+          placeholder={copy.cards.previewPlaceholder}
+          className="h-full"
+        />
+      </div>
+
+      <div className="relative flex h-full flex-col justify-end">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
+
+        <Link
+          href={`/p/${record.pen_user}/${record.pen_slug}`}
+          className="focus-outline relative flex flex-1 flex-col justify-end px-6 pt-24 pb-12"
         >
-          <span aria-hidden>↗</span>
-          <span>{copy.cards.openCodePen}</span>
-        </a>
+          <div className="flex flex-wrap items-center gap-3 text-[0.7rem] uppercase tracking-[0.2em] text-white/70">
+            {record.stack ? (
+              <span className="rounded-full border border-white/30 px-3 py-1 text-[0.65rem] font-semibold text-white/80">
+                {record.stack}
+              </span>
+            ) : null}
+            <span>{difficulty}</span>
+            {publishedAt ? (
+              <time dateTime={record.created_at ?? undefined} className="text-white/60">
+                {publishedAt}
+              </time>
+            ) : null}
+          </div>
+
+          <h3 className="mt-4 text-2xl font-semibold leading-tight transition-transform duration-500 group-hover:-translate-y-1 group-focus-within:-translate-y-1">
+            {title ?? copy.cards.untitled}
+          </h3>
+
+          {summary ? (
+            <p className="mt-4 max-h-0 overflow-hidden text-sm leading-relaxed text-white/80 opacity-0 transition-all duration-500 group-focus-within:max-h-40 group-focus-within:opacity-100 group-hover:max-h-40 group-hover:opacity-100">
+              {summary}
+            </p>
+          ) : null}
+
+          <TagList
+            tags={record.tags ?? undefined}
+            className="mt-4 max-h-0 overflow-hidden opacity-0 transition-all duration-500 group-focus-within:max-h-24 group-focus-within:opacity-100 group-hover:max-h-24 group-hover:opacity-100"
+          />
+        </Link>
+
+        <div className="relative flex items-center justify-between px-6 pb-6 text-sm text-white/80">
+          <span className="font-medium text-white">{record.author_name ?? record.pen_user}</span>
+          <a
+            href={penUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs font-medium text-white/90 transition hover:border-white/60 hover:text-white"
+          >
+            <span aria-hidden>↗</span>
+            <span>{copy.cards.openCodePen}</span>
+          </a>
+        </div>
       </div>
     </article>
   );

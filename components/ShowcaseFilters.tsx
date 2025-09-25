@@ -2,7 +2,10 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState, FormEvent, useEffect } from 'react';
+
 import { getUiCopy } from '@/lib/translations';
+
+
 import { useLanguage } from './LanguageProvider';
 
 const PAGE_SIZE = 12;

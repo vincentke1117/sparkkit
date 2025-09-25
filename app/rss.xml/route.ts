@@ -34,7 +34,7 @@ export async function GET() {
   <channel>
     <title>SparkKit · CodePen Showcases</title>
     <link>${baseUrl}</link>
-    <description>最新的 CodePen 灵感作品，来自 SparkKit 的双语解读。</description>
+    <description>最新的 CodePen 灵感作品，附带 SparkKit 的亮点提炼与复用提示。</description>
     <language>zh-CN</language>
     ${items}
   </channel>

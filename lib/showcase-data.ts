@@ -8,6 +8,8 @@ export const SHOWCASE_TABLE_CANDIDATES = Array.from(
     ),
   ),
 );
+
+
 function getRecencyTimestamp(record: ShowcaseRecord): number {
   const created = record.created_at ? Date.parse(record.created_at) : 0;
   const updated = record.updated_at ? Date.parse(record.updated_at) : 0;

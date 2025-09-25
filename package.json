@@ -1,7 +1,7 @@
 {
   "name": "sparkkit",
   "version": "1.0.0",
-  "description": "SparkKit showcases front-end read-only experience powered by Supabase.",
+  "description": "SparkKit showcases front-end inspiration with deep dives, reuse steps, and performance notes.",
   "private": true,
   "scripts": {
     "dev": "next dev",

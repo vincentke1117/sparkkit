@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
   const title = getLocalizedText(record, 'title', 'zh') ?? `${record.pen_user}/${record.pen_slug}`;
   const summary =
-    getLocalizedText(record, 'summary', 'zh') ?? 'Discover CodePen inspiration curated by SparkKit with bilingual insights.';
+    getLocalizedText(record, 'summary', 'zh') ?? 'Discover CodePen inspiration curated by SparkKit with deep-dive reuse notes.';
   const detailPath = `/p/${record.pen_user}/${record.pen_slug}`;
   const canonical = getSiteUrl(detailPath);
   const image = record.thumbnail_url ?? getOgImageUrl();

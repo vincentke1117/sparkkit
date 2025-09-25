@@ -126,14 +126,14 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
-      heroTitle: 'Curated CodePen inspiration with bilingual deep dives',
+      heroTitle: 'Curated CodePen inspiration with deep-dive reuse notes',
       heroDescription:
-        'SparkKit celebrates imaginative front-end experiments and shares bilingual storylines that distill reuse-ready insights for makers.',
+        'SparkKit celebrates imaginative front-end experiments and distills key ideas, reuse steps, and performance notes so you can ship faster.',
       directoryCta: 'Open showcase index',
       features: [
         {
           title: 'Original insights',
-          description: 'Bilingual breakdowns covering key ideas, reuse steps, and performance notes for rapid adoption.',
+          description: 'Deep-dive breakdowns covering key ideas, reuse steps, and performance notes for rapid adoption.',
         },
         {
           title: 'Searchable tags',
@@ -211,19 +211,19 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       strapline: 'SparkKit pulse',
       title: 'Showcase highlights',
       description:
-        'A quick snapshot of the bilingual gallery — see when the library was last refreshed and how many CodePen showcases are ready for reuse.',
+        'A quick snapshot of the gallery — see when the library was last refreshed and how many CodePen showcases are ready for reuse.',
       metrics: {
         versionLabel: 'Curation batch',
         versionHint: 'Matches the latest editorial release.',
         syncLabel: 'Last refresh',
-        syncHint: 'Supabase pull and page regeneration timestamp.',
+        syncHint: 'Data pull and page regeneration timestamp.',
         indexedLabel: 'Showcases live',
         indexedHint: 'Total pens currently featured across the site.',
       },
       cacheTitle: 'What we curate',
       cacheBody:
-        'SparkKit spotlights inventive CSS, SVG, and WebGL experiments with Chinese and English commentary, plus actionable reuse notes for every pick.',
-      cacheHitLabel: 'Bilingual coverage',
+        'SparkKit spotlights inventive CSS, SVG, and WebGL experiments with detailed commentary plus actionable reuse notes for every pick.',
+      cacheHitLabel: 'Content coverage',
       cachePending: 'TBD',
       revalidateProtected: 'Themes: CSS · SVG · WebGL',
       cronCadence: 'Language toggle: 中文 / English',
@@ -253,7 +253,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       features: [
         {
           title: '原创解读',
-          description: '双语拆解亮点、复用步骤与性能观察，帮助快速落地。',
+          description: '拆解亮点、复用步骤与性能观察，帮助快速落地。',
         },
         {
           title: '可检索标签',
@@ -329,19 +329,19 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       strapline: 'SparkKit 速览',
       title: '策展速览',
       description:
-        '快速了解 SparkKit 双语策展的最新进度：看看作品库何时刷新、当前上线了多少 CodePen 灵感。',
+        '快速了解 SparkKit 策展的最新进度：看看作品库何时刷新、当前上线了多少 CodePen 灵感。',
       metrics: {
         versionLabel: '策展批次',
         versionHint: '对应最新的发布标签。',
         syncLabel: '最近更新',
-        syncHint: 'Supabase 拉取与页面再生成的时间。',
+        syncHint: '数据拉取与页面再生成的时间。',
         indexedLabel: '已上线作品',
         indexedHint: '索引、站点地图与 RSS 正在展示的作品总数。',
       },
       cacheTitle: '我们在呈现什么',
       cacheBody:
-        'SparkKit 专注 CSS、SVG、WebGL 等前端实验，提供中英文解读、亮点提炼与复用建议，助你快速借鉴。',
-      cacheHitLabel: '双语覆盖率',
+       'SparkKit 专注 CSS、SVG、WebGL 等前端实验，提炼亮点、复用建议与性能观察，助你快速借鉴。',
+      cacheHitLabel: '内容覆盖率',
       cachePending: '统计中',
       revalidateProtected: '主题聚焦：CSS · SVG · WebGL',
       cronCadence: '语言切换：中文 / English',
