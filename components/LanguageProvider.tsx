@@ -2,7 +2,6 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-
 import { normalizeNavigatorLanguage, SupportedLocale } from '@/lib/i18n';
 
 type LanguageContextValue = {

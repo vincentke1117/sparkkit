@@ -58,61 +58,57 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
   const difficulty = record.difficulty ?? copy.cards.difficultyFallback;
 
   return (
-    <article className="group flex h-full min-h-[24rem] flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 text-white shadow-lg transition duration-500 hover:-translate-y-1 hover:shadow-glow">
-      <Link
-        href={`/p/${record.pen_user}/${record.pen_slug}`}
-        className="focus-outline flex flex-1 flex-col"
-      >
-        <Thumbnail
-          record={record}
-          alt={title}
-          placeholder={copy.cards.previewPlaceholder}
-        />
+    <article className="group relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60 text-white shadow-lg transition duration-500 hover:-translate-y-1 hover:shadow-glow">
+      <Thumbnail
+        record={record}
+        alt={title}
+        placeholder={copy.cards.previewPlaceholder}
+      />
 
-        <div className="flex flex-1 flex-col gap-4 px-6 py-8">
-          <div className="flex flex-wrap items-center gap-3 text-[0.65rem] uppercase tracking-[0.2em] text-white/60">
-            {record.stack ? (
-              <span className="rounded-full border border-white/20 px-3 py-1 text-[0.6rem] font-semibold text-white/80">
-                {record.stack}
-              </span>
-            ) : null}
-            <span className="text-white/70">{difficulty}</span>
-            {publishedAt ? (
-              <time dateTime={record.created_at ?? undefined} className="text-white/50">
-                {publishedAt}
-              </time>
-            ) : null}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-[calc(100%-10rem)] overflow-hidden rounded-t-3xl bg-gradient-to-t from-slate-950/95 via-slate-950/80 to-slate-950/30 backdrop-blur-lg transition-transform duration-500 group-focus-within:translate-y-0 group-hover:translate-y-0">
+        <div className="pointer-events-auto flex flex-col gap-6 px-6 pb-6 pt-8">
+          <div className="flex flex-col gap-3 text-sm text-white/75">
+            <div className="flex flex-wrap items-center gap-3 text-[0.65rem] uppercase tracking-[0.2em] text-white/60">
+              {record.stack ? (
+                <span className="rounded-full border border-white/20 px-3 py-1 text-[0.6rem] font-semibold text-white/80">
+                  {record.stack}
+                </span>
+              ) : null}
+              <span className="text-white/70">{difficulty}</span>
+              {publishedAt ? (
+                <time dateTime={record.created_at ?? undefined} className="text-white/50">
+                  {publishedAt}
+                </time>
+              ) : null}
+            </div>
+            {summary ? <p className="leading-relaxed text-white/80">{summary}</p> : null}
+            <TagList
+              tags={record.tags ?? undefined}
+              className="text-xs text-white/70"
+            />
           </div>
 
-          <h3 className="text-2xl font-semibold leading-tight transition-transform duration-500 group-hover:-translate-y-1 group-focus-within:-translate-y-1">
-            {title ?? copy.cards.untitled}
-          </h3>
-
-          {summary ? (
-
-            <p className="mt-2 max-h-0 overflow-hidden text-sm leading-relaxed text-white/80 opacity-0 transition-all duration-500 group-focus-within:max-h-40 group-focus-within:opacity-100 group-hover:max-h-40 group-hover:opacity-100">
-              {summary}
-            </p>
-          ) : null}
-
-          <TagList
-            tags={record.tags ?? undefined}
-            className="mt-auto max-h-0 overflow-hidden opacity-0 transition-all duration-500 group-focus-within:max-h-24 group-focus-within:opacity-100 group-hover:max-h-24 group-hover:opacity-100"
-          />
+          <div className="flex flex-col gap-3 border-t border-white/10 pt-4">
+            <div className="flex items-start justify-between gap-4">
+              <Link
+                href={`/p/${record.pen_user}/${record.pen_slug}`}
+                className="focus-outline block text-left"
+              >
+                <h3 className="text-2xl font-semibold leading-tight">{title ?? copy.cards.untitled}</h3>
+              </Link>
+              <a
+                href={penUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="focus-outline inline-flex shrink-0 items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs font-medium text-white/90 transition hover:border-white/60 hover:text-white"
+              >
+                <span aria-hidden>↗</span>
+                <span>{copy.cards.openCodePen}</span>
+              </a>
+            </div>
+            <span className="text-sm font-medium text-white/80">{record.author_name ?? record.pen_user}</span>
+          </div>
         </div>
-      </Link>
-
-      <div className="flex items-center justify-between px-6 pb-6 text-sm text-white/80">
-        <span className="font-medium text-white">{record.author_name ?? record.pen_user}</span>
-        <a
-          href={penUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs font-medium text-white/90 transition hover:border-white/60 hover:text-white"
-        >
-          <span aria-hidden>↗</span>
-          <span>{copy.cards.openCodePen}</span>
-        </a>
       </div>
     </article>
   );

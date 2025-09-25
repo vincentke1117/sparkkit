@@ -75,7 +75,6 @@ export function ShowcaseExplorer({
   useEffect(() => {
     const filters = parseSearchParams(searchParams, pageSize);
 
-
     let cancelled = false;
     setState((prev) => ({ ...prev, loading: true }));
 

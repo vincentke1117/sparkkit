@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-
 import { ShowcaseDetail } from '@/components/ShowcaseDetail';
 import { getLocalizedText } from '@/lib/i18n';
 import { fetchShowcaseByUserAndSlug, fetchShowcases } from '@/lib/supabase';
