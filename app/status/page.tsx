@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+
+
 import { StatusPageContent } from '@/components/StatusPageContent';
 import { fetchSyncStatus } from '@/lib/supabase';
 import { getSiteUrl } from '@/lib/site';

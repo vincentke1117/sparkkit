@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 
 import { getUiCopy } from '@/lib/translations';
 
-
 import { LanguageToggle } from './LanguageToggle';
 import { useLanguage } from './LanguageProvider';
 
@@ -15,9 +14,10 @@ export function SiteHeader() {
   const copy = getUiCopy(locale);
 
   const navLinks = [
-    { href: '/', label: copy.nav.home },
-    { href: '/showcases', label: copy.nav.showcases },
-    { href: '/status', label: copy.nav.status },
+    { href: '/', label: copy.nav.home, external: false },
+    { href: '/showcases', label: copy.nav.showcases, external: false },
+    { href: '/status', label: copy.nav.status, external: false },
+    { href: '/rss.xml', label: copy.nav.rss, external: true },
   ];
 
   return (
@@ -28,16 +28,27 @@ export function SiteHeader() {
         </Link>
         <nav className="hidden items-center gap-4 text-xs text-white/60 sm:flex">
           {navLinks.map((link) => {
-            const isActive =
-              pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
+            if (link.external) {
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="focus-outline rounded-full px-3 py-1 transition hover:bg-white/5 hover:text-white"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.label}
+                </a>
+              );
+            }
+
+            const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={`focus-outline rounded-full px-3 py-1 transition ${
-                  isActive
-                    ? 'bg-white/10 text-white'
-                    : 'hover:bg-white/5 hover:text-white'
+                  isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'
                 }`}
               >
                 {link.label}

@@ -10,6 +10,7 @@ type LandingCopy = {
   heroTitle: string;
   heroDescription: string;
   directoryCta: string;
+  rssCta: string;
   features: FeatureCopy[];
   featuredTitle: string;
   featuredDescription: string;
@@ -83,6 +84,7 @@ type UiCopy = {
     home: string;
     showcases: string;
     status: string;
+    rss: string;
   };
   landing: LandingCopy;
   cards: {
@@ -123,6 +125,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       home: 'Home',
       showcases: 'Showcase Index',
       status: 'Status',
+      rss: 'RSS',
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
@@ -130,6 +133,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       heroDescription:
         'SparkKit celebrates imaginative front-end experiments and distills key ideas, reuse steps, and performance notes so you can ship faster.',
       directoryCta: 'Open showcase index',
+      rssCta: 'Subscribe via RSS',
       features: [
         {
           title: 'Original insights',
@@ -243,6 +247,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       home: '首页',
       showcases: '灵感索引',
       status: '运行状态',
+      rss: 'RSS 订阅',
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
@@ -250,6 +255,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       heroDescription:
         'SparkKit 聚焦前端实验灵感，以深度解析提炼亮点与复用价值，陪你把灵感延展成作品。',
       directoryCta: '打开灵感索引',
+      rssCta: '订阅 RSS',
       features: [
         {
           title: '原创解读',
@@ -340,7 +346,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       },
       cacheTitle: '我们在呈现什么',
       cacheBody:
-       'SparkKit 专注 CSS、SVG、WebGL 等前端实验，提炼亮点、复用建议与性能观察，助你快速借鉴。',
+        'SparkKit 专注 CSS、SVG、WebGL 等前端实验，提炼亮点、复用建议与性能观察，助你快速借鉴。',
       cacheHitLabel: '内容覆盖率',
       cachePending: '统计中',
       revalidateProtected: '主题聚焦：CSS · SVG · WebGL',

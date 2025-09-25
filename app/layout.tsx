@@ -89,7 +89,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="flex-1">{children}</main>
             <footer className="border-t border-white/10 bg-black/30 py-8 text-center text-xs text-white/60">
             <p>© {new Date().getFullYear()} SparkKit · CodePen inspiration by VincentK.</p>
-
             </footer>
           </div>
         </LanguageProvider>

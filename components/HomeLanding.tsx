@@ -122,6 +122,8 @@ function selectDailyFeatured(records: ShowcaseRecord[]): ShowcaseRecord[] {
 
   return shuffled.slice(0, FEATURED_COUNT_PER_TIER * 2);
 }
+
+
 type HomeLandingProps = {
   showcases: ShowcaseRecord[];
   showDevNote?: boolean;
@@ -150,16 +152,25 @@ export function HomeLanding({ showcases, showDevNote = false }: HomeLandingProps
             </span>
             <h1 className="text-4xl font-semibold leading-tight text-gradient sm:text-5xl">{copy.landing.heroTitle}</h1>
             <p className="max-w-xl text-base leading-relaxed text-white/80">{copy.landing.heroDescription}</p>
-            <div className="flex flex-wrap items-center gap-4">
-              <Link
-                href="/showcases"
-                className="neon-border focus-outline inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white transition"
-              >
-                {copy.landing.directoryCta}
-                <span aria-hidden>↗</span>
-              </Link>
-              <GeoClock />
-            </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              href="/showcases"
+              className="neon-border focus-outline inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white transition"
+            >
+              {copy.landing.directoryCta}
+              <span aria-hidden>↗</span>
+            </Link>
+            <a
+              href="/rss.xml"
+              className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-medium text-white/80 transition hover:border-white/60 hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {copy.landing.rssCta}
+              <span aria-hidden>☌</span>
+            </a>
+            <GeoClock />
+          </div>
           </div>
           <div className="grid w-full max-w-md grid-cols-1 gap-4">
             {copy.landing.features.map((card) => (
