@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
-
 import { useLanguage } from './LanguageProvider';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { OEmbedFrame } from './OEmbedFrame';
@@ -51,7 +50,6 @@ export function ShowcaseDetail({ record, jsonLd, canonical }: ShowcaseDetailProp
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
       <button
         type="button"
         onClick={handleBack}

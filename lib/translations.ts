@@ -340,7 +340,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       },
       cacheTitle: '我们在呈现什么',
       cacheBody:
-        'SparkKit 专注 CSS、SVG、WebGL 等前端实验，提炼亮点、复用建议与性能观察，助你快速借鉴。',
+       'SparkKit 专注 CSS、SVG、WebGL 等前端实验，提炼亮点、复用建议与性能观察，助你快速借鉴。',
       cacheHitLabel: '内容覆盖率',
       cachePending: '统计中',
       revalidateProtected: '主题聚焦：CSS · SVG · WebGL',
