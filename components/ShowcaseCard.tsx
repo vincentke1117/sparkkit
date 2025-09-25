@@ -89,6 +89,7 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
           </h3>
 
           {summary ? (
+
             <p className="mt-2 max-h-0 overflow-hidden text-sm leading-relaxed text-white/80 opacity-0 transition-all duration-500 group-focus-within:max-h-40 group-focus-within:opacity-100 group-hover:max-h-40 group-hover:opacity-100">
               {summary}
             </p>
