@@ -216,13 +216,13 @@ export function HomeLanding({ showcases, showDevNote = false }: HomeLandingProps
         ) : expanded ? (
           <div className="columns-1 gap-6 sm:columns-2 xl:columns-3">
             {galleryRecords.map((showcase) => (
-              <div key={showcase.id} className="mb-6 [break-inside:avoid]">
+              <div key={showcase.id} className="mb-6 flex justify-center [break-inside:avoid]">
                 <ShowcaseCard record={showcase} />
               </div>
             ))}
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid justify-items-center gap-6 md:grid-cols-2 xl:grid-cols-3">
             {galleryRecords.map((showcase) => (
               <ShowcaseCard key={showcase.id} record={showcase} />
             ))}
