@@ -17,9 +17,10 @@ type ThumbnailProps = {
   placeholder: string;
   dayLabel?: string;
   monthLabel?: string;
+  yearLabel?: string;
 };
 
-function Thumbnail({ record, alt, placeholder, dayLabel, monthLabel }: ThumbnailProps) {
+function Thumbnail({ record, alt, placeholder, dayLabel, monthLabel, yearLabel }: ThumbnailProps) {
   const hasImage = Boolean(record.thumbnail_url);
   const showBadge = Boolean(dayLabel && monthLabel);
 
@@ -27,6 +28,7 @@ function Thumbnail({ record, alt, placeholder, dayLabel, monthLabel }: Thumbnail
     <div className="showcase-card__thumbnail">
       {showBadge ? (
         <div className="showcase-card__date" aria-hidden>
+          {yearLabel ? <span className="year">{yearLabel}</span> : null}
           <span className="day">{dayLabel}</span>
           <span className="month">{monthLabel}</span>
         </div>
@@ -69,12 +71,17 @@ function getBadgeParts(createdAt: string | null | undefined, locale: string) {
     month: 'short',
     timeZone: 'Asia/Shanghai',
   });
+  const yearFormatter = new Intl.DateTimeFormat(badgeLocale, {
+    year: 'numeric',
+    timeZone: 'Asia/Shanghai',
+  });
 
   const day = dayFormatter.format(date);
   const monthRaw = monthFormatter.format(date);
   const month = badgeLocale === 'en-US' ? monthRaw.toUpperCase() : monthRaw;
+  const year = yearFormatter.format(date);
 
-  return { day, month };
+  return { day, month, year };
 }
 
 export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
@@ -99,6 +106,7 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
         placeholder={copy.cards.previewPlaceholder}
         dayLabel={badge?.day}
         monthLabel={badge?.month}
+        yearLabel={badge?.year}
       />
 
       <div className="showcase-card__content">

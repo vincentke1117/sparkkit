@@ -7,8 +7,7 @@ import { fetchShowcaseByUserAndSlug, fetchShowcases } from '@/lib/supabase';
 import { buildPenUrl } from '@/lib/url';
 import { getOgImageUrl, getSiteUrl } from '@/lib/site';
 
-export const revalidate = 600; // 10 minutes
-
+export const dynamicParams = false;
 type Params = {
   user: string;
   slug: string;
@@ -135,7 +134,11 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
   return <ShowcaseDetail record={record} jsonLd={jsonLd} canonical={canonical} />;
 }
 
-export async function generateStaticParams() {
+export const generateStaticParams = async (): Promise<Params[]> => {
   const showcases = await fetchShowcases({ limit: 5000 });
+  if (showcases.length === 0) {
+    return [{ user: 'placeholder', slug: 'placeholder' }];
+  }
+
   return showcases.map((item) => ({ user: item.pen_user, slug: item.pen_slug }));
-}
+};

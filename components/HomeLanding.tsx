@@ -205,13 +205,13 @@ export function HomeLanding({ showcases, showDevNote = false }: HomeLandingProps
             <p>{copy.landing.empty}</p>
           </div>
         ) : expanded ? (
-          <div className="grid justify-items-center gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          <div className="showcase-grid">
             {galleryRecords.map((showcase) => (
               <ShowcaseCard key={showcase.id} record={showcase} />
             ))}
           </div>
         ) : (
-          <div className="grid justify-items-center gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="showcase-grid">
             {galleryRecords.map((showcase) => (
               <ShowcaseCard key={showcase.id} record={showcase} />
             ))}

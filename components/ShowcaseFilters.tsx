@@ -83,7 +83,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
   return (
     <form
       onSubmit={handleSubmit}
-      className="glass-panel flex flex-col gap-6 rounded-3xl p-6 text-sm text-white/80"
+      className="glass-panel flex flex-col gap-6 rounded-3xl p-6 text-sm text-white/80 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:max-w-[260px] lg:overflow-y-auto lg:pr-2"
       aria-label={copy.filters.ariaLabel}
     >
       <div className="flex flex-col gap-2">
@@ -101,17 +101,17 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="flex flex-col gap-4">
         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-widest text-white/60">
           {copy.filters.stackLabel}
           <select
             value={stack}
             onChange={(event) => setStack(event.target.value)}
-            className="focus-outline rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white"
+            className="focus-outline rounded-xl border border-white/10 bg-white text-slate-900 px-4 py-3 text-sm shadow-sm"
           >
             <option value="">{copy.filters.allOption}</option>
             {stacks.map((option) => (
-              <option key={option} value={option}>
+              <option key={option} value={option} style={{ color: '#0d1328' }}>
                 {option}
               </option>
             ))}
@@ -123,11 +123,11 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
           <select
             value={difficulty}
             onChange={(event) => setDifficulty(event.target.value)}
-            className="focus-outline rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white"
+            className="focus-outline rounded-xl border border-white/10 bg-white text-slate-900 px-4 py-3 text-sm shadow-sm"
           >
             <option value="">{copy.filters.allOption}</option>
             {difficulties.map((option) => (
-              <option key={option} value={option}>
+              <option key={option} value={option} style={{ color: '#0d1328' }}>
                 {option}
               </option>
             ))}

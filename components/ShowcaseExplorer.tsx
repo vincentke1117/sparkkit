@@ -115,7 +115,7 @@ export function ShowcaseExplorer({
   );
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[320px,1fr] lg:items-start">
+    <div className="grid gap-8 lg:grid-cols-[260px,1fr] lg:items-start xl:gap-12">
       <ShowcaseFilters
         availableTags={filterOptions.availableTags}
         stacks={filterOptions.stacks}
@@ -124,11 +124,7 @@ export function ShowcaseExplorer({
 
       <section className="flex flex-col gap-6">
         {state.loading ? (
-          <div
-            className="grid justify-items-center gap-y-12 gap-x-8 md:grid-cols-2 xl:grid-cols-3"
-            aria-live="polite"
-            aria-busy="true"
-          >
+          <div className="showcase-grid" aria-live="polite" aria-busy="true">
             {skeletonCards}
           </div>
         ) : state.records.length === 0 ? (
@@ -138,7 +134,7 @@ export function ShowcaseExplorer({
           </div>
         ) : (
           <>
-            <div className="grid justify-items-center gap-y-12 gap-x-8 md:grid-cols-2 xl:grid-cols-3">
+            <div className="showcase-grid">
               {state.records.map((showcase) => (
                 <ShowcaseCard key={showcase.id} record={showcase} />
               ))}
@@ -158,8 +154,8 @@ type FallbackProps = {
 
 export function ShowcaseExplorerFallback({ pageSize = PAGE_SIZE }: FallbackProps) {
   return (
-    <div className="grid gap-8 lg:grid-cols-[320px,1fr] lg:items-start">
-      <div className="glass-panel flex flex-col gap-4 rounded-3xl p-6 text-sm text-white/60">
+    <div className="grid gap-8 lg:grid-cols-[260px,1fr] lg:items-start xl:gap-12">
+      <div className="glass-panel flex flex-col gap-4 rounded-3xl p-6 text-sm text-white/60 lg:sticky lg:top-24">
         <div className="h-4 w-24 rounded-full bg-white/10" />
         <div className="h-10 rounded-2xl bg-white/5" />
         <div className="h-10 rounded-2xl bg-white/5" />
@@ -167,7 +163,7 @@ export function ShowcaseExplorerFallback({ pageSize = PAGE_SIZE }: FallbackProps
       </div>
 
       <section className="flex flex-col gap-6">
-        <div className="grid justify-items-center gap-y-12 gap-x-8 md:grid-cols-2 xl:grid-cols-3">
+        <div className="showcase-grid">
           {Array.from({ length: pageSize }).map((_, index) => (
             <div
               key={`fallback-${index}`}

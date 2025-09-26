@@ -158,6 +158,14 @@ a {
   height: 100% !important;
 }
 
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem 2.5rem;
+  justify-items: center;
+  width: 100%;
+}
+
 .showcase-card {
   position: relative;
   width: 300px;
@@ -215,8 +223,8 @@ a {
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 55px;
-  height: 55px;
+  width: 64px;
+  height: 68px;
   border-radius: 9999px;
   display: flex;
   flex-direction: column;
@@ -229,6 +237,12 @@ a {
   box-shadow: 0 10px 20px rgba(111, 155, 255, 0.35);
 }
 
+.showcase-card__date .year {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  opacity: 0.85;
+}
 .showcase-card__date .day {
   font-size: 1.15rem;
   line-height: 1;
