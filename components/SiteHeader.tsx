@@ -17,7 +17,6 @@ export function SiteHeader() {
     { href: '/', label: copy.nav.home, external: false },
     { href: '/showcases', label: copy.nav.showcases, external: false },
     { href: '/status', label: copy.nav.status, external: false },
-    { href: '/rss.xml', label: copy.nav.rss, external: true },
   ];
 
   return (

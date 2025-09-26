@@ -124,7 +124,11 @@ export function ShowcaseExplorer({
 
       <section className="flex flex-col gap-6">
         {state.loading ? (
-          <div className="grid justify-items-center gap-6 md:grid-cols-2 xl:grid-cols-3" aria-live="polite" aria-busy="true">
+          <div
+            className="grid justify-items-center gap-y-12 gap-x-8 md:grid-cols-2 xl:grid-cols-3"
+            aria-live="polite"
+            aria-busy="true"
+          >
             {skeletonCards}
           </div>
         ) : state.records.length === 0 ? (
@@ -134,7 +138,7 @@ export function ShowcaseExplorer({
           </div>
         ) : (
           <>
-            <div className="grid justify-items-center gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid justify-items-center gap-y-12 gap-x-8 md:grid-cols-2 xl:grid-cols-3">
               {state.records.map((showcase) => (
                 <ShowcaseCard key={showcase.id} record={showcase} />
               ))}
@@ -163,7 +167,7 @@ export function ShowcaseExplorerFallback({ pageSize = PAGE_SIZE }: FallbackProps
       </div>
 
       <section className="flex flex-col gap-6">
-        <div className="grid justify-items-center gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid justify-items-center gap-y-12 gap-x-8 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: pageSize }).map((_, index) => (
             <div
               key={`fallback-${index}`}

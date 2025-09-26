@@ -1,6 +1,6 @@
 # SparkKit
 
-SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展示站点，聚焦于 CodePen 灵感作品的精选与多语言解读。站点通过 SSR + ISR 策略保障性能与 SEO，以移动端优先的玻璃拟态视觉呈现“封面 / 列表 / 详情 / 状态 / RSS / Sitemap”全链路体验。
+SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展示站点，聚焦于 CodePen 灵感作品的精选与多语言解读。站点通过 SSR + ISR 策略保障性能与 SEO，以移动端优先的玻璃拟态视觉呈现“封面 / 列表 / 详情 / 状态 / Sitemap”全链路体验。
 
 ## 功能概览
 
@@ -8,7 +8,7 @@ SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展
 - **列表页 `/showcases`**：关键词 + 标签 + Stack + 难度筛选，分页呈现卡片，空态友好文案。
 - **详情页 `/p/[user]/[slug]`**：标题 / 作者 / 原链 / 缩略图 / 多语言解读 / 复用步骤 / 性能提示 / 懒加载 oEmbed。缺少内容时提供 CodePen CTA。
 - **状态页 `/status`**：展示版本号、最近同步时间、已索引数量与缓存命中率描述。
-- **Sitemap & RSS**：`/sitemap.xml`（最近 5000 条，日更）与 `/rss.xml`（最近 100 条，6 小时刷新）。
+- **Sitemap**：`/sitemap.xml`（每日更新）。RSS 订阅尚未开放。
 - **多语言容错**：以 `NEXT_PUBLIC_DEFAULT_LOCALE` 作为 SSR 回退，客户端监听 `navigator.language` 自动切换；字段缺失时在中英间回退。
 - **可访问性**：键盘焦点环、≥4.5:1 对比度、`alt` 占位与 `prefers-reduced-motion` 友好动效。
 - **结构化数据**：全站注入 `WebSite + SearchAction` JSON-LD；详情页额外输出 `CreativeWork + BreadcrumbList`，并设置 canonical / hreflang / OG / Twitter 卡片。
@@ -41,7 +41,7 @@ SparkKit 是一个基于 Next.js 14 + Supabase 只读数据源构建的前端展
   - 列表页 `revalidate = 900`（15 分钟）；
   - 详情页 `revalidate = 600`（10 分钟）；
   - 状态页 `revalidate = 300`（5 分钟）；
-  - Sitemap 每日刷新，RSS 每 6 小时刷新。
+  - Sitemap 每日刷新。
 - **客户端容错**：`LanguageProvider` 监听 `navigator.language`，SSR 环境下安全回退；`OEmbedFrame` 采用 IntersectionObserver 懒加载嵌入内容；筛选组件对路由参数变更自适应。
 - **UI 设计**：深色玻璃拟态、霓虹渐变、悬停微倾动效、A11y 焦点环、标签胶囊。
 
@@ -111,16 +111,16 @@ npm run build
 2. **前置 Secrets / Vars**：
    - `NEXT_PUBLIC_SUPABASE_URL`、`NEXT_PUBLIC_SUPABASE_ANON_KEY`（只读）。
    - `SITE_REVALIDATE_TOKEN`（若调用再生成接口）。
-   - `SITEMAP_RSS_BUCKET`、`STATUS_PING_URL`、`PREVIEW_BASE_URL`（按需）。
+   - `SITEMAP_RSS_BUCKET`、`STATUS_PING_URL`、`PREVIEW_BASE_URL`（按需，若后续恢复 RSS 可复用该配置）。
 3. **执行阶段建议拆分 Job**：
    1. 初始化：检出代码、设置 Node 版本、安装依赖（使用锁文件）。
    2. 环境校验：检测必需 Secrets 是否存在，缺失直接 fail。
    3. 数据拉取：调用 Supabase 读取最近 N 条/天记录，对比上次快照计算增量，输出新增/修改/下线统计。
    4. 再生成 / 缓存刷新：调用站点再验证接口或触发 CDN 失效，传入 `SITE_REVALIDATE_TOKEN`。
-   5. 站点地图 & RSS：生成最新 `sitemap.xml`、`rss.xml`，必要时上传对象存储，校验 HTTP 200 与缓存头。
+   5. 站点地图：生成最新 `sitemap.xml`，必要时上传对象存储并校验 HTTP 200 与缓存头。（RSS 可在后续恢复时复用同一流程。）
    6. 状态记录与通知：写入“最近同步时间”文件或表，并向 `STATUS_PING_URL` / ChatOps 发送摘要。
    7. 失败处理：捕获异常、归档日志，冷却 3–5 分钟后自动重试一次；连续失败≥2 次推送告警并暂停自动发布。
 4. **安全与产出**：
    - 所有 Secrets 保持最小权限，禁止在日志打印完整密钥。
-   - 日志需包含拉取数量、增量统计、再生成路径数、Sitemap / RSS 条目数及耗时。
+   - 日志需包含拉取数量、增量统计、再生成路径数、Sitemap 条目数及耗时。（若恢复 RSS，再追加相应统计。）
    - 状态页应呈现最近一次 Actions 成功时间与数据增量概览。

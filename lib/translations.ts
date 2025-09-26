@@ -10,7 +10,6 @@ type LandingCopy = {
   heroTitle: string;
   heroDescription: string;
   directoryCta: string;
-  rssCta: string;
   features: FeatureCopy[];
   featuredTitle: string;
   featuredDescription: string;
@@ -32,6 +31,9 @@ type FilterCopy = {
   apply: string;
   reset: string;
   noTags: string;
+  showTags: string;
+  hideTags: string;
+  tagsHint: string;
 };
 
 type PaginationCopy = {
@@ -84,7 +86,6 @@ type UiCopy = {
     home: string;
     showcases: string;
     status: string;
-    rss: string;
   };
   landing: LandingCopy;
   cards: {
@@ -125,7 +126,6 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       home: 'Home',
       showcases: 'Showcase Index',
       status: 'Status',
-      rss: 'RSS',
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
@@ -133,7 +133,6 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       heroDescription:
         'SparkKit celebrates imaginative front-end experiments and distills key ideas, reuse steps, and performance notes so you can ship faster.',
       directoryCta: 'Open showcase index',
-      rssCta: 'Subscribe via RSS',
       features: [
         {
           title: 'Original insights',
@@ -176,6 +175,9 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       apply: 'Apply filters',
       reset: 'Reset',
       noTags: 'No tags yet',
+      showTags: 'Show tags',
+      hideTags: 'Hide tags',
+      tagsHint: 'Tags stay tucked away until you need them — expand to combine filters by theme.',
     },
     explorer: {
       noResultsTitle: 'No results',
@@ -247,7 +249,6 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       home: '首页',
       showcases: '灵感索引',
       status: '运行状态',
-      rss: 'RSS 订阅',
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
@@ -255,7 +256,6 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       heroDescription:
         'SparkKit 聚焦前端实验灵感，以深度解析提炼亮点与复用价值，陪你把灵感延展成作品。',
       directoryCta: '打开灵感索引',
-      rssCta: '订阅 RSS',
       features: [
         {
           title: '原创解读',
@@ -296,6 +296,9 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       apply: '应用筛选',
       reset: '重置',
       noTags: '暂无标签',
+      showTags: '展开标签',
+      hideTags: '收起标签',
+      tagsHint: '标签已折叠，保持界面干净；需要按主题筛选时再展开。',
     },
     explorer: {
       noResultsTitle: '暂无结果',
@@ -342,7 +345,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
         syncLabel: '最近更新',
         syncHint: '数据拉取与页面再生成的时间。',
         indexedLabel: '已上线作品',
-        indexedHint: '索引、站点地图与 RSS 正在展示的作品总数。',
+        indexedHint: '索引与站点地图当前呈现的作品总数。',
       },
       cacheTitle: '我们在呈现什么',
       cacheBody:

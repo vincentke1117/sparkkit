@@ -28,12 +28,15 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
   const [stack, setStack] = useState(searchParams.get('stack') ?? '');
   const [difficulty, setDifficulty] = useState(searchParams.get('difficulty') ?? '');
   const [selectedTags, setSelectedTags] = useState<Set<string>>(initialTags);
+  const [tagsOpen, setTagsOpen] = useState(initialTags.size > 0);
 
   useEffect(() => {
     setQuery(searchParams.get('q') ?? '');
     setStack(searchParams.get('stack') ?? '');
     setDifficulty(searchParams.get('difficulty') ?? '');
-    setSelectedTags(new Set(searchParams.getAll('tags')));
+    const nextTags = new Set(searchParams.getAll('tags'));
+    setSelectedTags(nextTags);
+    setTagsOpen(nextTags.size > 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString()]);
 
@@ -94,7 +97,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder={copy.filters.keywordPlaceholder}
-          className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/40"
+          className="focus-outline rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40"
         />
       </div>
 
@@ -104,7 +107,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
           <select
             value={stack}
             onChange={(event) => setStack(event.target.value)}
-            className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white"
+            className="focus-outline rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white"
           >
             <option value="">{copy.filters.allOption}</option>
             {stacks.map((option) => (
@@ -120,7 +123,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
           <select
             value={difficulty}
             onChange={(event) => setDifficulty(event.target.value)}
-            className="focus-outline rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white"
+            className="focus-outline rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white"
           >
             <option value="">{copy.filters.allOption}</option>
             {difficulties.map((option) => (
@@ -133,33 +136,51 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
       </div>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="text-xs font-semibold uppercase tracking-widest text-white/60">{copy.filters.tagsLabel}</legend>
-        <div className="flex flex-wrap gap-2">
-          {availableTags.map((tag) => {
-            const checked = selectedTags.has(tag);
-            return (
-              <label
-                key={tag}
-                className={`focus-outline inline-flex cursor-pointer select-none items-center gap-2 rounded-full border px-3 py-2 text-xs transition ${
-                  checked
-                    ? 'border-accent/70 bg-accent/20 text-white'
-                    : 'border-white/20 bg-white/5 text-white/70 hover:border-accent/50 hover:text-white'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={checked}
-                  onChange={() => toggleTag(tag)}
-                  name="tags"
-                  value={tag}
-                />
-                #{tag}
-              </label>
-            );
-          })}
-          {availableTags.length === 0 ? <span className="text-white/40">{copy.filters.noTags}</span> : null}
+        <div className="flex items-center justify-between gap-4">
+          <legend className="text-xs font-semibold uppercase tracking-widest text-white/60">
+            {copy.filters.tagsLabel}
+          </legend>
+          <button
+            type="button"
+            onClick={() => setTagsOpen((prev) => !prev)}
+            className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 text-[0.7rem] uppercase tracking-[0.2em] text-white/70 transition hover:border-accent/50 hover:text-white"
+            aria-expanded={tagsOpen}
+          >
+            {tagsOpen ? copy.filters.hideTags : copy.filters.showTags}
+          </button>
         </div>
+        {tagsOpen ? (
+          <div className="flex flex-wrap gap-2">
+            {availableTags.map((tag) => {
+              const checked = selectedTags.has(tag);
+              return (
+                <label
+                  key={tag}
+                  className={`focus-outline inline-flex cursor-pointer select-none items-center gap-2 rounded-full border px-3 py-2 text-xs transition ${
+                    checked
+                      ? 'border-accent/70 bg-accent/20 text-white'
+                      : 'border-white/20 bg-white/5 text-white/70 hover:border-accent/50 hover:text-white'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={checked}
+                    onChange={() => toggleTag(tag)}
+                    name="tags"
+                    value={tag}
+                  />
+                  #{tag}
+                </label>
+              );
+            })}
+            {availableTags.length === 0 ? <span className="text-white/40">{copy.filters.noTags}</span> : null}
+          </div>
+        ) : (
+          <p className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-3 text-xs text-white/60">
+            {copy.filters.tagsHint}
+          </p>
+        )}
       </fieldset>
 
       <div className="mt-2 flex flex-wrap items-center gap-4">

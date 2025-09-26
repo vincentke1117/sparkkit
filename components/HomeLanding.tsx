@@ -159,15 +159,6 @@ export function HomeLanding({ showcases, showDevNote = false }: HomeLandingProps
               {copy.landing.directoryCta}
               <span aria-hidden>↗</span>
             </Link>
-            <a
-              href="/rss.xml"
-              className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-medium text-white/80 transition hover:border-white/60 hover:text-white"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {copy.landing.rssCta}
-              <span aria-hidden>☌</span>
-            </a>
             <GeoClock />
           </div>
           </div>
@@ -214,11 +205,9 @@ export function HomeLanding({ showcases, showDevNote = false }: HomeLandingProps
             <p>{copy.landing.empty}</p>
           </div>
         ) : expanded ? (
-          <div className="columns-1 gap-6 sm:columns-2 xl:columns-3">
+          <div className="grid justify-items-center gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {galleryRecords.map((showcase) => (
-              <div key={showcase.id} className="mb-6 flex justify-center [break-inside:avoid]">
-                <ShowcaseCard record={showcase} />
-              </div>
+              <ShowcaseCard key={showcase.id} record={showcase} />
             ))}
           </div>
         ) : (
