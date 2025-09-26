@@ -8,7 +8,6 @@ import { buildPenUrl } from '@/lib/url';
 import { getOgImageUrl, getSiteUrl } from '@/lib/site';
 
 export const dynamicParams = false;
-
 type Params = {
   user: string;
   slug: string;
