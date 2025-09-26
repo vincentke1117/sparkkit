@@ -77,6 +77,7 @@ function getBadgeParts(createdAt: string | null | undefined, locale: string) {
   return { day, month };
 }
 
+
 export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
   const { locale } = useLanguage();
   const copy = getUiCopy(locale);
