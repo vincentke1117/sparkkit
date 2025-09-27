@@ -32,10 +32,7 @@ export type ShowcaseFilters = {
   tags?: string[];
   stack?: string;
   difficulty?: string;
-<<<<<<< HEAD
   order?: 'latest' | 'oldest';
-=======
->>>>>>> main
   limit?: number;
   offset?: number;
 };
