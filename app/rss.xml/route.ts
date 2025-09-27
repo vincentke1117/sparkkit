@@ -1,49 +1,88 @@
 import { NextResponse } from 'next/server';
 
+import { getLocalizedList, getLocalizedText } from '@/lib/i18n';
 import { fetchShowcases } from '@/lib/supabase';
-import { getLocalizedText } from '@/lib/i18n';
+import { ShowcaseRecord } from '@/lib/types';
 import { buildPenUrl } from '@/lib/url';
 import { getSiteUrl } from '@/lib/site';
 
-export const revalidate = 21600; // 6 hours
-export const dynamic = 'force-static';
+const FEED_LIMIT = 100;
+
+function escapeXml(input: string): string {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function buildItem(record: ShowcaseRecord, siteUrl: string): string {
+  const detailUrl = `${siteUrl}/p/${record.pen_user}/${record.pen_slug}`;
+  const sourceUrl = buildPenUrl(record);
+  const zhTitle = getLocalizedText(record, 'title', 'zh');
+  const enTitle = getLocalizedText(record, 'title', 'en');
+  const title = zhTitle ?? enTitle ?? `${record.pen_user}/${record.pen_slug}`;
+
+  const zhSummary = getLocalizedText(record, 'summary', 'zh');
+  const enSummary = getLocalizedText(record, 'summary', 'en');
+  const keyPointsZh = getLocalizedList(record, 'key_points', 'zh');
+  const keyPointsEn = getLocalizedList(record, 'key_points', 'en');
+
+  const descriptionParts = [zhSummary, enSummary]
+    .flatMap((value) => (value ? [value] : []))
+    .concat(keyPointsZh.length > 0 ? keyPointsZh : [])
+    .concat(keyPointsEn.length > 0 ? keyPointsEn : []);
+
+  const description = descriptionParts.length > 0
+    ? escapeXml(descriptionParts.join('\n\n'))
+    : 'SparkKit · Inspire · Decode · Reuse';
+
+  const pubDate = record.updated_at ?? record.created_at;
+  const author = record.author_name ?? record.pen_user;
+
+  return `    <item>
+      <title>${escapeXml(title)}</title>
+      <link>${escapeXml(detailUrl)}</link>
+      <guid isPermaLink="true">${escapeXml(detailUrl)}</guid>
+      <description>${description}</description>
+      <author>${escapeXml(author)}</author>
+      <category>${escapeXml(record.difficulty ?? 'Unspecified')}</category>
+      ${
+        record.tags && record.tags.length > 0
+          ? record.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join('\n      ')
+          : ''
+      }
+      <source url="${escapeXml(sourceUrl)}">CodePen</source>
+      ${pubDate ? `<pubDate>${new Date(pubDate).toUTCString()}</pubDate>` : ''}
+    </item>`;
+}
+
+export const revalidate = 86_400; // daily
 
 export async function GET() {
-  const baseUrl = getSiteUrl();
-  const showcases = await fetchShowcases({ limit: 100 });
+  const siteUrl = getSiteUrl();
+  const records = await fetchShowcases({ limit: FEED_LIMIT, order: 'latest' });
+  const items = records.map((record) => buildItem(record, siteUrl)).join('\n');
+  const lastBuild = new Date().toUTCString();
 
-  const items = showcases
-    .map((item) => {
-      const title = getLocalizedText(item, 'title', 'zh') ?? `${item.pen_user}/${item.pen_slug}`;
-      const summary = getLocalizedText(item, 'summary', 'zh') ?? '';
-      const url = getSiteUrl(`/p/${item.pen_user}/${item.pen_slug}`);
-      const original = buildPenUrl(item);
-      const pubDate = item.created_at ? new Date(item.created_at).toUTCString() : new Date().toUTCString();
-      return `<item>
-  <title><![CDATA[${title}]]></title>
-  <link>${url}</link>
-  <guid>${item.id}</guid>
-  <pubDate>${pubDate}</pubDate>
-  <description><![CDATA[${summary}\n原作：${original}]]></description>
-</item>`;
-    })
-    .join('\n');
-
-  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+  const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>SparkKit · CodePen Showcases</title>
-    <link>${baseUrl}</link>
-    <description>最新的 CodePen 灵感作品，附带 SparkKit 的亮点提炼与复用提示。</description>
+    <title>SparkKit — RSS</title>
+    <link>${escapeXml(siteUrl)}</link>
+    <description>Daily curated CodePen showcases with bilingual analysis from SparkKit.</description>
     <language>zh-CN</language>
-    ${items}
+    <lastBuildDate>${lastBuild}</lastBuildDate>
+    <ttl>1440</ttl>
+${items}
   </channel>
 </rss>`;
 
-  return new NextResponse(rss, {
+  return new NextResponse(feed, {
     headers: {
       'Content-Type': 'application/rss+xml; charset=utf-8',
-      'Cache-Control': 'public, s-maxage=21600, stale-while-revalidate=3600',
+      'Cache-Control': 'public, max-age=0, s-maxage=3600',
     },
   });
 }

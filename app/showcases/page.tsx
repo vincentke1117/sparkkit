@@ -4,27 +4,16 @@ import type { Metadata } from 'next';
 import { ShowcaseExplorerFallback } from '@/components/ShowcaseExplorer';
 import { PAGE_SIZE } from '@/components/ShowcaseFilters';
 import { ShowcasesPageShell } from '@/components/ShowcasesPageShell';
+import { createListMetadata } from '@/lib/meta';
 import { fetchDistinctFilters, fetchShowcases } from '@/lib/supabase';
-import { getSiteUrl } from '@/lib/site';
 
 export const revalidate = 900; // 15 minutes
 
-export const metadata: Metadata = {
-  title: '作品列表',
-  description: '浏览 SparkKit 精选的 CodePen 作品，按关键词、标签、Stack 与难度筛选。',
-  alternates: {
-    canonical: getSiteUrl('/showcases'),
-    languages: {
-      'en-US': getSiteUrl('/showcases'),
-      'zh-CN': getSiteUrl('/showcases?hl=zh-cn'),
-      'x-default': getSiteUrl('/showcases'),
-    },
-  },
-};
+export const metadata: Metadata = createListMetadata('/showcases');
 
 export default async function ShowcasesPage() {
   const [showcasesRaw, filters] = await Promise.all([
-    fetchShowcases({ limit: PAGE_SIZE + 1 }),
+    fetchShowcases({ limit: PAGE_SIZE + 1, order: 'latest' }),
     fetchDistinctFilters(),
   ]);
 

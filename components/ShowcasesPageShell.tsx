@@ -22,6 +22,7 @@ type ShowcasesPageShellProps = {
 export function ShowcasesPageShell({ initialRecords, initialHasNext, filterOptions }: ShowcasesPageShellProps) {
   const { locale } = useLanguage();
   const copy = getUiCopy(locale);
+  const localeQuery = locale === 'zh' ? 'hl=zh-cn' : 'hl=en';
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 pb-24 pt-16 md:px-10 lg:px-16">
@@ -32,7 +33,7 @@ export function ShowcasesPageShell({ initialRecords, initialHasNext, filterOptio
             <h1 className="text-3xl font-semibold text-white">{copy.showcases.title}</h1>
           </div>
           <Link
-            href="/"
+            href={`/?${localeQuery}`}
             className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-wide text-white/70 transition hover:border-accent/70 hover:text-white"
           >
             {copy.showcases.returnHome}

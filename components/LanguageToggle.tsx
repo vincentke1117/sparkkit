@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { useLanguage } from './LanguageProvider';
 
@@ -11,14 +12,27 @@ const OPTIONS = [
 
 export function LanguageToggle() {
   const { locale, setLocale } = useLanguage();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleToggle = useCallback(
     (nextLocale: 'zh' | 'en') => {
       if (nextLocale !== locale) {
         setLocale(nextLocale);
+        if (typeof window !== 'undefined') {
+          const params = new URLSearchParams(searchParams?.toString());
+          if (nextLocale === 'zh') {
+            params.set('hl', 'zh-cn');
+          } else {
+            params.set('hl', 'en');
+          }
+          const query = params.toString();
+          router.replace(query ? `${pathname}?${query}` : pathname ?? '/', { scroll: false });
+        }
       }
     },
-    [locale, setLocale],
+    [locale, pathname, router, searchParams, setLocale],
   );
 
   return (

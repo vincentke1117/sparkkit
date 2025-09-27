@@ -10,6 +10,7 @@ type LandingCopy = {
   heroTitle: string;
   heroDescription: string;
   directoryCta: string;
+  rssCta: string;
   features: FeatureCopy[];
   featuredTitle: string;
   featuredDescription: string;
@@ -26,6 +27,7 @@ type FilterCopy = {
   keywordPlaceholder: string;
   stackLabel: string;
   difficultyLabel: string;
+  dateLabel: string;
   tagsLabel: string;
   allOption: string;
   apply: string;
@@ -48,6 +50,7 @@ type DetailCopy = {
   authorLabel: string;
   openOnCodepen: string;
   publishedLabel: string;
+  difficultyLabel: string;
   stackLabel: string;
   previewTitle: string;
   previewUnavailable: string;
@@ -91,6 +94,8 @@ type UiCopy = {
   cards: {
     previewPlaceholder: string;
     openCodePen: string;
+    copyLink: string;
+    copySuccess: string;
     untitled: string;
     stackFallback: string;
     difficultyFallback: string;
@@ -124,32 +129,33 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
   en: {
     nav: {
       home: 'Home',
-      showcases: 'Showcase Index',
+      showcases: 'Showcases',
       status: 'Status',
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
-      heroTitle: 'Curated CodePen inspiration with deep-dive reuse notes',
+      heroTitle: '6 fresh showcases daily — ready to reuse',
       heroDescription:
-        'SparkKit celebrates imaginative front-end experiments and distills key ideas, reuse steps, and performance notes so you can ship faster.',
-      directoryCta: 'Open showcase index',
+        'From wow to how: SparkKit distills the key ideas, reuse steps, and performance notes so you ship faster.',
+      directoryCta: 'Browse all',
+      rssCta: 'Follow RSS',
       features: [
         {
-          title: 'Original insights',
-          description: 'Deep-dive breakdowns covering key ideas, reuse steps, and performance notes for rapid adoption.',
+          title: 'Key Points Fast',
+          description: 'Grasp the highlights and reasoning in 30 seconds.',
         },
         {
-          title: 'Searchable tags',
-          description: 'Filter by stack, tags, and difficulty combinations to surface the perfect reference.',
+          title: 'Precise Filtering',
+          description: 'Mix tags, difficulty, and stack to find the perfect reuse.',
         },
         {
-          title: 'Respectful embeds',
-          description: 'Credit every creator with lazy-loaded embeds, alt text, and direct CodePen links.',
+          title: 'Official Embed',
+          description: 'Clear credit with smoother lazy-loaded embeds.',
         },
       ],
       featuredTitle: "Today's Picks",
       featuredDescription:
-        'Six daily picks — three advanced and three intermediate — refreshed every morning at 08:00 Beijing time (UTC+8).',
+        'Six daily picks — three intermediate and three advanced — refreshed at 08:00 CST (UTC+8).',
       viewAll: 'View entire gallery',
       collapse: 'Collapse gallery',
       masonryHint: 'Scroll to explore the full waterfall layout.',
@@ -159,7 +165,9 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     },
     cards: {
       previewPlaceholder: 'Preview coming soon',
-      openCodePen: 'CodePen',
+      openCodePen: 'Open on CodePen',
+      copyLink: 'Copy link',
+      copySuccess: 'Link copied',
       untitled: 'Untitled pen',
       stackFallback: 'Web',
       difficultyFallback: 'Unspecified',
@@ -168,8 +176,9 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       ariaLabel: 'Showcase filters',
       keywordLabel: 'Keyword',
       keywordPlaceholder: 'Search title, summary, or analysis…',
-      stackLabel: '技术栈',
+      stackLabel: 'Stack',
       difficultyLabel: 'Difficulty',
+      dateLabel: 'Date',
       tagsLabel: 'Tags',
       allOption: 'All',
       apply: 'Apply filters',
@@ -194,7 +203,8 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       authorLabel: 'Author',
       openOnCodepen: 'Open on CodePen',
       publishedLabel: 'Published',
-      stackLabel: '技术栈',
+      difficultyLabel: 'Difficulty',
+      stackLabel: 'Stack',
       previewTitle: 'Live preview',
       previewUnavailable: 'Preview unavailable — open CodePen to experience the pen.',
       highlightsTitle: 'Highlights',
@@ -208,31 +218,31 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     },
     showcases: {
       strapline: 'Showcases',
-      title: 'Showcase Index',
+      title: 'All Showcases',
       description:
-        'Explore the curated showcase library with keyword, tag, stack, and difficulty filters. Fresh updates land daily, pairing each entry with SEO-focused metadata to stay discoverable.',
+        'Search title, summary, or analysis; combine tags, difficulty, stack, and date sorting to pinpoint reusable inspiration fast.',
       returnHome: '← Back home',
     },
     status: {
-      strapline: 'SparkKit pulse',
-      title: 'Showcase highlights',
+      strapline: 'SparkKit status',
+      title: 'Status overview',
       description:
-        'A quick snapshot of the gallery — see when the library was last refreshed and how many CodePen showcases are ready for reuse.',
+        'Check the live SparkKit build: version, last sync time, and how many showcases are currently published.',
       metrics: {
-        versionLabel: 'Curation batch',
-        versionHint: 'Matches the latest editorial release.',
-        syncLabel: 'Last refresh',
-        syncHint: 'Data pull and page regeneration timestamp.',
+        versionLabel: 'Build version',
+        versionHint: 'Matches the latest deployed batch.',
+        syncLabel: 'Last sync',
+        syncHint: 'Timestamp for the database pull and page regeneration.',
         indexedLabel: 'Showcases live',
-        indexedHint: 'Total pens currently featured across the site.',
+        indexedHint: 'Pens currently included in the sitemap and RSS feed.',
       },
-      cacheTitle: 'What we curate',
+      cacheTitle: 'What ships',
       cacheBody:
-        'SparkKit spotlights inventive CSS, SVG, and WebGL experiments with detailed commentary plus actionable reuse notes for every pick.',
-      cacheHitLabel: 'Content coverage',
-      cachePending: 'TBD',
-      revalidateProtected: 'Themes: CSS · SVG · WebGL',
-      cronCadence: 'Language toggle: 中文 / English',
+        'SparkKit curates front-end experiments with key takeaways, reuse steps, and performance callouts so you can adapt ideas quickly.',
+      cacheHitLabel: 'Cache hit rate',
+      cachePending: 'Measuring…',
+      revalidateProtected: 'Refresh cadence: 08:00 CST',
+      cronCadence: 'Languages: 中文 / English',
     },
     errors: {
       notFoundTitle: 'Page not found',
@@ -247,31 +257,32 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
   zh: {
     nav: {
       home: '首页',
-      showcases: '灵感索引',
+      showcases: '全部作品',
       status: '运行状态',
     },
     landing: {
       strapline: 'Inspire · Decode · Reuse',
-      heroTitle: '精选 CodePen 灵感，深度解析随时复用',
+      heroTitle: '每天 6 条灵感，直接可复用',
       heroDescription:
-        'SparkKit 聚焦前端实验灵感，以深度解析提炼亮点与复用价值，陪你把灵感延展成作品。',
-      directoryCta: '打开灵感索引',
+        '从「看到酷炫」到「落地复用」，SparkKit 提炼要点、复用步骤与性能提示，省去你翻代码的时间。',
+      directoryCta: '浏览全部作品',
+      rssCta: '关注 RSS',
       features: [
         {
-          title: '原创解读',
-          description: '拆解亮点、复用步骤与性能观察，帮助快速落地。',
+          title: '要点速读',
+          description: '30 秒看懂亮点与原理。',
         },
         {
-          title: '可检索标签',
-          description: '按 stack、标签、难度组合筛选，秒速定位灵感来源。',
+          title: '标签精搜',
+          description: '按主题、难度、技术栈灵活组合。',
         },
         {
-          title: '合规嵌入',
-          description: '尊重作者版权，提供懒加载嵌入与直达 CodePen 链接。',
+          title: '官方嵌入',
+          description: '署名清晰，懒加载更顺畅。',
         },
       ],
       featuredTitle: '今日精选',
-      featuredDescription: '每日精选 6 条作品（高级 3 条 + 进阶 3 条），每天北京时间 08:00 自动更新。',
+      featuredDescription: '每日精选 6 条（进阶与高级各 3 条），北京时间 08:00 自动更新。',
       viewAll: '展开全部',
       collapse: '收起',
       masonryHint: '滚动浏览艺术化的瀑布流展示。',
@@ -280,7 +291,9 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     },
     cards: {
       previewPlaceholder: '预览即将上线',
-      openCodePen: 'CodePen',
+      openCodePen: '在 CodePen 打开',
+      copyLink: '复制链接',
+      copySuccess: '链接已复制',
       untitled: '未命名作品',
       stackFallback: 'Web',
       difficultyFallback: '未标注',
@@ -291,6 +304,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       keywordPlaceholder: '搜索标题、摘要或解读…',
       stackLabel: '技术栈',
       difficultyLabel: '难度',
+      dateLabel: '时间',
       tagsLabel: '标签',
       allOption: '全部',
       apply: '应用筛选',
@@ -315,6 +329,7 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
       authorLabel: '作者',
       openOnCodepen: '在 CodePen 打开',
       publishedLabel: '发布',
+      difficultyLabel: '难度',
       stackLabel: '技术栈',
       previewTitle: '作品预览',
       previewUnavailable: '暂无法内嵌预览，请前往 CodePen 体验原作品。',
@@ -329,31 +344,28 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     },
     showcases: {
       strapline: 'Showcases',
-      title: '灵感索引',
-      description:
-        '精选灵感索引支持按关键词、标签、Stack 与难度组合筛选。列表每日更新并附带 SEO 结构化信息，确保作品始终易于检索。',
+      title: '全部作品',
+      description: '搜索标题、摘要或解读，配合标签、难度、技术栈与时间排序快速锁定可复用灵感。',
       returnHome: '← 返回首页',
     },
     status: {
       strapline: 'SparkKit 速览',
-      title: '策展速览',
-      description:
-        '快速了解 SparkKit 策展的最新进度：看看作品库何时刷新、当前上线了多少 CodePen 灵感。',
+      title: '运行状态',
+      description: '查看 SparkKit 展示页的版本、最近同步时间与当前上线的作品数量。',
       metrics: {
-        versionLabel: '策展批次',
-        versionHint: '对应最新的发布标签。',
-        syncLabel: '最近更新',
-        syncHint: '数据拉取与页面再生成的时间。',
-        indexedLabel: '已上线作品',
-        indexedHint: '索引与站点地图当前呈现的作品总数。',
+        versionLabel: '站点版本',
+        versionHint: '对应最近一次部署批次。',
+        syncLabel: '最近同步',
+        syncHint: '数据库读取与页面再生成的时间。',
+        indexedLabel: '作品总数',
+        indexedHint: '当前 Sitemap 与 RSS 涵盖的作品数量。',
       },
-      cacheTitle: '我们在呈现什么',
-      cacheBody:
-        'SparkKit 专注 CSS、SVG、WebGL 等前端实验，提炼亮点、复用建议与性能观察，助你快速借鉴。',
-      cacheHitLabel: '内容覆盖率',
+      cacheTitle: '展示内容',
+      cacheBody: 'SparkKit 汇集前端实验灵感，并附上要点、复用步骤与性能提示，方便立即借鉴。',
+      cacheHitLabel: '缓存命中率',
       cachePending: '统计中',
-      revalidateProtected: '主题聚焦：CSS · SVG · WebGL',
-      cronCadence: '语言切换：中文 / English',
+      revalidateProtected: '日更：北京时间 08:00',
+      cronCadence: '语言：中文 / English',
     },
     errors: {
       notFoundTitle: '未找到页面',

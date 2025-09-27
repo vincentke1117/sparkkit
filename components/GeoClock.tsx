@@ -16,7 +16,11 @@ export function GeoClock() {
   }, [locale]);
 
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide">
+    <div
+      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs uppercase tracking-wide"
+      role="status"
+      aria-live="polite"
+    >
       <span className="h-2 w-2 rounded-full bg-gradient-to-br from-accent to-accentSecondary" aria-hidden />
       <span>{state.label}</span>
       <span className="text-white/70">{state.zone}</span>

@@ -44,14 +44,22 @@ export async function fetchShowcasesClient(filters: ShowcaseFilters = {}): Promi
   const supabase = getClient();
 
   if (!supabase) {
+<<<<<<< HEAD
+    return applyFallbackFilters(getSortedMockShowcases(filters.order ?? 'latest'), filters);
+=======
     return applyFallbackFilters(getSortedMockShowcases(), filters);
+>>>>>>> main
   }
 
   for (const table of SHOWCASE_TABLE_CANDIDATES) {
     let queryBuilder = supabase
       .from(table)
       .select('*')
+<<<<<<< HEAD
+      .order('created_at', { ascending: filters.order === 'oldest' });
+=======
       .order('created_at', { ascending: false });
+>>>>>>> main
 
     if (filters.query) {
       const like = `%${filters.query}%`;
@@ -85,6 +93,17 @@ export async function fetchShowcasesClient(filters: ShowcaseFilters = {}): Promi
         continue;
       }
       console.warn(`[SparkKit] Failed to load showcases in browser from table "${table}":`, error.message);
+<<<<<<< HEAD
+      return applyFallbackFilters(getSortedMockShowcases(filters.order ?? 'latest'), filters);
+    }
+
+    if (data) {
+      return sortShowcasesByRecency(data, filters.order ?? 'latest');
+    }
+  }
+
+  return applyFallbackFilters(getSortedMockShowcases(filters.order ?? 'latest'), filters);
+=======
       return applyFallbackFilters(getSortedMockShowcases(), filters);
     }
 
@@ -94,4 +113,5 @@ export async function fetchShowcasesClient(filters: ShowcaseFilters = {}): Promi
   }
 
   return applyFallbackFilters(getSortedMockShowcases(), filters);
+>>>>>>> main
 }

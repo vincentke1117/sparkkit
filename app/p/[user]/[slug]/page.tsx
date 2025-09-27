@@ -3,11 +3,13 @@ import { notFound } from 'next/navigation';
 
 import { ShowcaseDetail } from '@/components/ShowcaseDetail';
 import { getLocalizedText } from '@/lib/i18n';
+import { createDetailMetadata } from '@/lib/meta';
 import { fetchShowcaseByUserAndSlug, fetchShowcases } from '@/lib/supabase';
 import { buildPenUrl } from '@/lib/url';
-import { getOgImageUrl, getSiteUrl } from '@/lib/site';
+import { getSiteUrl } from '@/lib/site';
 
 export const dynamicParams = false;
+
 type Params = {
   user: string;
   slug: string;
@@ -22,49 +24,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     };
   }
 
-  const title = getLocalizedText(record, 'title', 'zh') ?? `${record.pen_user}/${record.pen_slug}`;
-  const summary =
-    getLocalizedText(record, 'summary', 'zh') ?? 'Discover CodePen inspiration curated by SparkKit with deep-dive reuse notes.';
-  const detailPath = `/p/${record.pen_user}/${record.pen_slug}`;
-  const canonical = getSiteUrl(detailPath);
-  const image = record.thumbnail_url ?? getOgImageUrl();
-  const publishedTime = record.created_at ?? undefined;
-
-  return {
-    title,
-    description: summary,
-    alternates: {
-      canonical,
-      languages: {
-        'en-US': canonical,
-        'zh-CN': `${canonical}?hl=zh-cn`,
-        'x-default': canonical,
-      },
-    },
-    openGraph: {
-      type: 'article',
-      url: canonical,
-      title,
-      description: summary,
-      images: [
-        {
-          url: image,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
-      authors: record.author_name ? [record.author_name] : undefined,
-      publishedTime,
-      tags: record.tags ?? undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description: summary,
-      images: [image],
-    },
-  };
+  return createDetailMetadata(record);
 }
 
 export default async function ShowcaseDetailPage({ params }: { params: Params }) {
@@ -99,6 +59,13 @@ export default async function ShowcaseDetailPage({ params }: { params: Params })
         }
       : undefined,
     keywords: record.tags ?? undefined,
+    citation: [
+      {
+        '@type': 'CreativeWork',
+        url: penUrl,
+        name: 'Original CodePen',
+      },
+    ],
   };
   const breadcrumbs = {
     '@type': 'BreadcrumbList',

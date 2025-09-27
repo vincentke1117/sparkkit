@@ -132,6 +132,8 @@ export function HomeLanding({ showcases, showDevNote = false }: HomeLandingProps
   const { locale } = useLanguage();
   const copy = getUiCopy(locale);
   const [expanded, setExpanded] = useState(false);
+  const localeQuery = locale === 'zh' ? 'hl=zh-cn' : 'hl=en';
+  const directoryHref = `/showcases?${localeQuery}`;
 
   const heroShowcases = useMemo(() => selectDailyFeatured(showcases), [showcases]);
   const galleryRecords = expanded ? showcases : heroShowcases;
@@ -153,11 +155,20 @@ export function HomeLanding({ showcases, showDevNote = false }: HomeLandingProps
             <p className="max-w-xl text-base leading-relaxed text-white/80">{copy.landing.heroDescription}</p>
           <div className="flex flex-wrap items-center gap-4">
             <Link
-              href="/showcases"
+              href={directoryHref}
               className="neon-border focus-outline inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white transition"
             >
               {copy.landing.directoryCta}
               <span aria-hidden>↗</span>
+            </Link>
+            <Link
+              href="/rss.xml"
+              className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm text-white/80 transition hover:border-accent/60 hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {copy.landing.rssCta}
+              <span aria-hidden>🌀</span>
             </Link>
             <GeoClock />
           </div>

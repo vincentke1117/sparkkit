@@ -99,3 +99,43 @@ export function formatDateReadable(value?: string | null, locale: SupportedLocal
     return date.toISOString();
   }
 }
+
+export function formatRelativeTime(value?: string | null, locale: SupportedLocale = 'en'): string | null {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  const diffSeconds = (date.getTime() - Date.now()) / 1000;
+  const absoluteSeconds = Math.abs(diffSeconds);
+
+  const thresholds: Array<{ limit: number; divisor: number; unit: Intl.RelativeTimeFormatUnit }> = [
+    { limit: 60, divisor: 1, unit: 'second' },
+    { limit: 3600, divisor: 60, unit: 'minute' },
+    { limit: 86_400, divisor: 3600, unit: 'hour' },
+    { limit: 2_592_000, divisor: 86_400, unit: 'day' },
+    { limit: 31_536_000, divisor: 2_592_000, unit: 'month' },
+    { limit: Number.POSITIVE_INFINITY, divisor: 31_536_000, unit: 'year' },
+  ];
+
+  const formatter = new Intl.RelativeTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', { numeric: 'auto' });
+
+  for (const { limit, divisor, unit } of thresholds) {
+    if (absoluteSeconds < limit) {
+      let valueToFormat = diffSeconds / divisor;
+      if (Math.abs(valueToFormat) >= 1) {
+        valueToFormat = Math.round(valueToFormat);
+      }
+      if (valueToFormat === 0) {
+        return formatter.format(0, 'minute');
+      }
+      return formatter.format(valueToFormat, unit);
+    }
+  }
+
+  return null;
+}

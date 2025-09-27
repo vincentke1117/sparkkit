@@ -338,6 +338,13 @@ a {
   color: rgba(186, 197, 255, 0.6);
 }
 
+.showcase-card__relative {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .showcase-card__tags {
   margin-top: 12px;
 }
@@ -345,9 +352,10 @@ a {
 .showcase-card__actions {
   margin-top: 14px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
   font-size: 0.78rem;
 }
 

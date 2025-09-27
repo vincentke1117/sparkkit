@@ -9,28 +9,30 @@ import { getDefaultLocale, getOgImageUrl, getSiteUrl } from '@/lib/site';
 const siteUrl = getSiteUrl();
 const ogImageUrl = getOgImageUrl();
 const defaultLocale = getDefaultLocale();
+const rssUrl = getSiteUrl('/rss.xml');
+
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'SparkKit · Inspire · Decode · Reuse',
-    template: '%s · SparkKit',
+    default: '灵点集 · SparkKit — 前端灵感与复用 | CodePen 精选解读',
+    template: '%s · 灵点集 · SparkKit',
   },
   description:
-    'SparkKit curates standout CodePen experiments with deep dives, reusable steps, and performance notes to help you ship faster.',
+    '每天 6 条精选 CodePen 作品，配要点、复用步骤与性能提示。支持标签/难度/技术栈检索与官方嵌入，快速把灵感落地。',
   alternates: {
     canonical: siteUrl,
     languages: {
-      'en-US': siteUrl,
+      'en-US': getSiteUrl('/?hl=en'),
       'zh-CN': getSiteUrl('/?hl=zh-cn'),
       'x-default': siteUrl,
     },
   },
   openGraph: {
     type: 'website',
-    title: 'SparkKit · Inspire · Decode · Reuse',
+    title: '灵点集 · SparkKit — 前端灵感与复用 | CodePen 精选解读',
     description:
-      'Discover CodePen masterpieces with deep dives, reuse checklists, and performance notes ready for rapid inspiration.',
+      '每天 6 条精选 CodePen 作品，附要点、复用步骤与性能提示，灵感随取随用。',
     url: siteUrl,
     siteName: 'SparkKit',
     images: [
@@ -46,9 +48,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@sparkkit',
     creator: '@sparkkit',
-    title: 'SparkKit · Inspire · Decode · Reuse',
-    description:
-      'Curated CodePen showcases with deep-dive analysis, reusable steps, and performance notes ready to explore.',
+    title: '灵点集 · SparkKit — 前端灵感与复用',
+    description: '6 条精选 CodePen 作品每日更新，解读即看即用。',
     images: [ogImageUrl],
   },
   icons: {
@@ -75,6 +76,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang={defaultLocale === 'zh' ? 'zh-CN' : 'en'}>
+      <head>
+        <link rel="preconnect" href="https://codepen.io" />
+        <link rel="preconnect" href="https://assets.codepen.io" />
+        <link rel="preconnect" href="https://cpwebassets.codepen.io" />
+        <link rel="alternate" type="application/rss+xml" href={rssUrl} title="SparkKit RSS" />
+      </head>
       <body className="relative min-h-screen bg-[--spark-background] text-white antialiased">
         <LanguageProvider defaultLocale={defaultLocale}>
           <script

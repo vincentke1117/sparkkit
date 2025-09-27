@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -14,10 +15,23 @@ export function SiteHeader() {
   const copy = getUiCopy(locale);
 
   const navLinks = [
-    { href: '/', label: copy.nav.home, external: false },
-    { href: '/showcases', label: copy.nav.showcases, external: false },
-    { href: '/status', label: copy.nav.status, external: false },
+    { path: '/', label: copy.nav.home, external: false },
+    { path: '/showcases', label: copy.nav.showcases, external: false },
+    { path: '/status', label: copy.nav.status, external: false },
   ];
+
+  const localeQuery = locale === 'zh' ? 'hl=zh-cn' : 'hl=en';
+
+  const buildHref = (path: string) => {
+    if (path.startsWith('http')) {
+      return path;
+    }
+    if (!localeQuery) {
+      return path;
+    }
+    const separator = path.includes('?') ? '&' : '?';
+    return `${path}${separator}${localeQuery}`;
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-black/40 backdrop-blur">
@@ -26,12 +40,12 @@ export function SiteHeader() {
           SparkKit
         </Link>
         <nav className="hidden items-center gap-4 text-xs text-white/60 sm:flex">
-          {navLinks.map((link) => {
+    {navLinks.map((link) => {
             if (link.external) {
               return (
                 <a
-                  key={link.href}
-                  href={link.href}
+                  key={link.path}
+                  href={buildHref(link.path)}
                   className="focus-outline rounded-full px-3 py-1 transition hover:bg-white/5 hover:text-white"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -41,11 +55,11 @@ export function SiteHeader() {
               );
             }
 
-            const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`));
+            const isActive = pathname === link.path || (link.path !== '/' && pathname.startsWith(`${link.path}/`));
             return (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link.path}
+                href={buildHref(link.path)}
                 className={`focus-outline rounded-full px-3 py-1 transition ${
                   isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'
                 }`}
@@ -55,7 +69,9 @@ export function SiteHeader() {
             );
           })}
         </nav>
-        <LanguageToggle />
+        <Suspense fallback={<span className="text-xs uppercase tracking-[0.2em] text-white/40">···</span>}>
+          <LanguageToggle />
+        </Suspense>
       </div>
     </header>
   );

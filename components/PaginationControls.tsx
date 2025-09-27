@@ -25,6 +25,10 @@ export function PaginationControls({
   prevParams.set('page', Math.max(1, currentPage - 1).toString());
   const nextParams = new URLSearchParams(searchParams.toString());
   nextParams.set('page', (currentPage + 1).toString());
+  prevParams.set('hl', locale === 'zh' ? 'zh-cn' : 'en');
+  nextParams.set('hl', locale === 'zh' ? 'zh-cn' : 'en');
+
+  const baseHref = `${pathname ?? '/showcases'}?hl=${locale === 'zh' ? 'zh-cn' : 'en'}`;
 
   const disablePrev = currentPage <= 1 || isLoading;
   const disableNext = !hasNext || isLoading;
@@ -39,7 +43,7 @@ export function PaginationControls({
         <Link
           aria-disabled={disablePrev}
           tabIndex={disablePrev ? -1 : undefined}
-          href={disablePrev ? pathname ?? '/showcases' : `${pathname}?${prevParams.toString()}`}
+          href={disablePrev ? baseHref : `${pathname}?${prevParams.toString()}`}
           className={`focus-outline inline-flex items-center gap-2 rounded-full border px-4 py-2 transition ${
             disablePrev
               ? 'cursor-not-allowed border-white/10 text-white/30'
@@ -51,7 +55,7 @@ export function PaginationControls({
         <Link
           aria-disabled={disableNext}
           tabIndex={disableNext ? -1 : undefined}
-          href={disableNext ? pathname ?? '/showcases' : `${pathname}?${nextParams.toString()}`}
+          href={disableNext ? baseHref : `${pathname}?${nextParams.toString()}`}
           className={`focus-outline inline-flex items-center gap-2 rounded-full border px-4 py-2 transition ${
             disableNext
               ? 'cursor-not-allowed border-white/10 text-white/30'

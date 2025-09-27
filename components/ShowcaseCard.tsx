@@ -1,9 +1,10 @@
 'use client';
 
+import { useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { formatDateReadable, getLocalizedText } from '@/lib/i18n';
+import { formatDateReadable, formatRelativeTime, getLocalizedText } from '@/lib/i18n';
 import { buildPenUrl } from '@/lib/url';
 import { ShowcaseRecord } from '@/lib/types';
 import { getUiCopy } from '@/lib/translations';
@@ -90,11 +91,49 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
   const title = getLocalizedText(record, 'title', locale) ?? copy.cards.untitled;
   const summary = getLocalizedText(record, 'summary', locale);
   const publishedAt = formatDateReadable(record.created_at, locale);
+  const relativePublished = formatRelativeTime(record.created_at, locale);
   const penUrl = buildPenUrl(record);
   const difficulty = record.difficulty ?? copy.cards.difficultyFallback;
   const stackLabel = record.stack ?? copy.cards.stackFallback;
   const author = record.author_name ?? record.pen_user;
-  const detailLabel = locale.startsWith('zh') ? '查看解读' : 'View analysis';
+  const detailLabel = locale.startsWith('zh') ? '阅读解读' : 'Read analysis';
+  const localeQuery = locale.startsWith('zh') ? 'hl=zh-cn' : 'hl=en';
+  const detailHref = `/p/${record.pen_user}/${record.pen_slug}?${localeQuery}`;
+
+  const [copied, setCopied] = useState(false);
+
+  const copyLink = useCallback(async () => {
+    try {
+      const targetUrl = new URL(detailHref, window.location.origin).toString();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(targetUrl);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = targetUrl;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('[SparkKit] Failed to copy showcase link', error);
+    }
+  }, [detailHref]);
+
+  const timeAriaLabel = useMemo(() => {
+    if (!publishedAt) {
+      return undefined;
+    }
+    if (relativePublished) {
+      return `${publishedAt} · ${relativePublished}`;
+    }
+    return publishedAt;
+  }, [publishedAt, relativePublished]);
 
   const badge = getBadgeParts(record.created_at, locale);
 
@@ -112,7 +151,7 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
       <div className="showcase-card__content">
         <span className="showcase-card__category">{stackLabel}</span>
 
-        <Link href={`/p/${record.pen_user}/${record.pen_slug}`} className="showcase-card__title focus-outline">
+        <Link href={detailHref} className="showcase-card__title focus-outline">
           {title}
         </Link>
 
@@ -124,18 +163,22 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
           <div className="showcase-card__meta">
             <span>{difficulty}</span>
             {publishedAt ? (
-              <time dateTime={record.created_at ?? undefined}>{publishedAt}</time>
+              <time
+                dateTime={record.created_at ?? undefined}
+                title={relativePublished ?? undefined}
+                aria-label={timeAriaLabel}
+              >
+                {publishedAt}
+              </time>
             ) : null}
+            {relativePublished ? <span className="showcase-card__relative">{relativePublished}</span> : null}
           </div>
 
           <TagList tags={record.tags ?? undefined} className="showcase-card__tags" />
         </div>
 
         <div className="showcase-card__actions">
-          <Link
-            href={`/p/${record.pen_user}/${record.pen_slug}`}
-            className="showcase-card__action focus-outline"
-          >
+          <Link href={detailHref} className="showcase-card__action focus-outline">
             {detailLabel}
           </Link>
           <a
@@ -147,7 +190,17 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
             <span aria-hidden>↗</span>
             <span>{copy.cards.openCodePen}</span>
           </a>
+          <button
+            type="button"
+            onClick={copyLink}
+            className="showcase-card__action focus-outline"
+          >
+            {copied ? copy.cards.copySuccess : copy.cards.copyLink}
+          </button>
         </div>
+        <span className="sr-only" aria-live="polite">
+          {copied ? copy.cards.copySuccess : ''}
+        </span>
       </div>
     </article>
   );

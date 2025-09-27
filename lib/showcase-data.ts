@@ -15,16 +15,17 @@ function getRecencyTimestamp(record: ShowcaseRecord): number {
   return Math.max(created, updated);
 }
 
-export function sortShowcasesByRecency(records: ShowcaseRecord[]): ShowcaseRecord[] {
-  return [...records].sort((a, b) => getRecencyTimestamp(b) - getRecencyTimestamp(a));
+export function sortShowcasesByRecency(records: ShowcaseRecord[], order: 'latest' | 'oldest' = 'latest'): ShowcaseRecord[] {
+  const factor = order === 'oldest' ? 1 : -1;
+  return [...records].sort((a, b) => (getRecencyTimestamp(a) - getRecencyTimestamp(b)) * factor);
 }
 
-export function getSortedMockShowcases(): ShowcaseRecord[] {
-  return sortShowcasesByRecency(mockShowcases);
+export function getSortedMockShowcases(order: 'latest' | 'oldest' = 'latest'): ShowcaseRecord[] {
+  return sortShowcasesByRecency(mockShowcases, order);
 }
 
 export function applyFallbackFilters(data: ShowcaseRecord[], filters: ShowcaseFilters): ShowcaseRecord[] {
-  const sorted = sortShowcasesByRecency(data);
+  const sorted = sortShowcasesByRecency(data, filters.order ?? 'latest');
   const query = filters.query?.trim().toLowerCase();
   const tags = filters.tags?.map((tag) => tag.toLowerCase());
   return sorted

@@ -35,7 +35,9 @@ export function StatusPageContent({ status }: StatusPageContentProps) {
         </div>
         <div className="glass-panel flex flex-col gap-2 rounded-3xl p-6 text-white/80">
           <span className="text-xs uppercase tracking-widest text-white/50">{copy.status.metrics.syncLabel}</span>
-          <span className="text-2xl font-semibold text-white">{syncedAt ?? '—'}</span>
+          <span className="text-2xl font-semibold text-white" aria-live="polite">
+            {syncedAt ?? '—'}
+          </span>
           <p className="text-xs text-white/60">{copy.status.metrics.syncHint}</p>
         </div>
         <div className="glass-panel flex flex-col gap-2 rounded-3xl p-6 text-white/80">

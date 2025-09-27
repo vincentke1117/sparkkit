@@ -27,6 +27,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
   const [query, setQuery] = useState(searchParams.get('q') ?? '');
   const [stack, setStack] = useState(searchParams.get('stack') ?? '');
   const [difficulty, setDifficulty] = useState(searchParams.get('difficulty') ?? '');
+  const [order, setOrder] = useState(searchParams.get('order') ?? '');
   const [selectedTags, setSelectedTags] = useState<Set<string>>(initialTags);
   const [tagsOpen, setTagsOpen] = useState(initialTags.size > 0);
 
@@ -34,6 +35,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
     setQuery(searchParams.get('q') ?? '');
     setStack(searchParams.get('stack') ?? '');
     setDifficulty(searchParams.get('difficulty') ?? '');
+    setOrder(searchParams.get('order') ?? '');
     const nextTags = new Set(searchParams.getAll('tags'));
     setSelectedTags(nextTags);
     setTagsOpen(nextTags.size > 0);
@@ -64,9 +66,14 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
     if (difficulty) {
       params.set('difficulty', difficulty);
     }
+    if (order) {
+      params.set('order', order);
+    }
     Array.from(selectedTags)
       .filter(Boolean)
       .forEach((tag) => params.append('tags', tag));
+
+    params.set('hl', locale === 'zh' ? 'zh-cn' : 'en');
 
     const queryString = params.toString();
     router.push(queryString ? `${pathname}?${queryString}` : pathname ?? '/showcases');
@@ -76,8 +83,12 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
     setQuery('');
     setStack('');
     setDifficulty('');
+    setOrder('');
     setSelectedTags(new Set());
-    router.push(pathname ?? '/showcases');
+    const params = new URLSearchParams();
+    params.set('hl', locale === 'zh' ? 'zh-cn' : 'en');
+    const queryString = params.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname ?? '/showcases');
   }
 
   return (
@@ -131,6 +142,23 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
                 {option}
               </option>
             ))}
+          </select>
+        </label>
+
+        <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-widest text-white/60">
+          {copy.filters.dateLabel}
+          <select
+            value={order}
+            onChange={(event) => setOrder(event.target.value)}
+            className="focus-outline rounded-xl border border-white/10 bg-white text-slate-900 px-4 py-3 text-sm shadow-sm"
+          >
+            <option value="">{copy.filters.allOption}</option>
+            <option value="latest" style={{ color: '#0d1328' }}>
+              {locale.startsWith('zh') ? '最新在前' : 'Newest first'}
+            </option>
+            <option value="oldest" style={{ color: '#0d1328' }}>
+              {locale.startsWith('zh') ? '最早在前' : 'Oldest first'}
+            </option>
           </select>
         </label>
       </div>
