@@ -43,7 +43,7 @@ const LEGAL_CONTENT: Record<SupportedLocale, Record<LegalVariant, LegalEntry>> =
     },
     terms: {
       title: 'Terms of service',
-      updated: 'Updated: Jan 10, 2025',
+      updated: 'Updated: Sep 28, 2025',
       intro:
         'By browsing SparkKit you agree to use the showcases for inspiration and respect the original authors\' licenses on CodePen.',
       sections: [
@@ -73,7 +73,11 @@ const LEGAL_CONTENT: Record<SupportedLocale, Record<LegalVariant, LegalEntry>> =
       sections: [
         {
           title: 'Contact channels',
-          body: ['Email: hello@sparkkit.dev', 'GitHub: open an issue in the repository for bugs or suggestions.'],
+          body: [
+            'Email: vincentxai2025@gmail.com',
+            'GitHub: https://github.com/vincentke1117/sparkkit',
+            'Twitter: https://x.com/VK_Vibing (@VK_Vibing)',
+          ],
         },
         {
           title: 'Advertising & monetization',
@@ -111,7 +115,7 @@ const LEGAL_CONTENT: Record<SupportedLocale, Record<LegalVariant, LegalEntry>> =
     },
     terms: {
       title: '服务条款',
-      updated: '更新日期：2025-01-10',
+      updated: '更新日期：2025-09-28',
       intro: '访问 SparkKit 表示你同意仅将作品用于学习与灵感延展，并尊重 CodePen 原作者的授权条款。',
       sections: [
         {
@@ -135,7 +139,11 @@ const LEGAL_CONTENT: Record<SupportedLocale, Record<LegalVariant, LegalEntry>> =
       sections: [
         {
           title: '联系方式',
-          body: ['邮箱：hello@sparkkit.dev', 'GitHub：在仓库 Issue 中反馈问题或建议。'],
+          body: [
+            '邮箱：vincentxai2025@gmail.com',
+            'GitHub：https://github.com/vincentke1117/sparkkit',
+            'Twitter：@VK_Vibing（https://x.com/VK_Vibing）',
+          ],
         },
         {
           title: '广告与变现',

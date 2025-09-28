@@ -107,26 +107,6 @@ npm run start
 
 Vercel 原生支持 Next.js 的 SSR / ISR 与图片优化，因此不再需要 `output: export` 或手工上传 `out/` 目录。若后续仍需静态导出，可通过 `NEXT_PUBLIC_BASE_PATH` 等变量在运行时区分托管环境。
 
+## 开源许可
 
-## GitHub Actions 执行说明（无代码）
-
-1. **触发方式**：
-   - 每日固定 UTC 时刻的 `schedule`（建议偏移 5–10 分钟避开高峰）。
-   - 支持 `workflow_dispatch` 手动触发用于紧急刷新。
-   - 可选增加失败后的自动重试与通知。
-2. **前置 Secrets / Vars**：
-   - `NEXT_PUBLIC_SUPABASE_URL`、`NEXT_PUBLIC_SUPABASE_ANON_KEY`（只读）。
-   - `SITE_REVALIDATE_TOKEN`（若调用再生成接口）。
-   - `SITEMAP_RSS_BUCKET`、`STATUS_PING_URL`、`PREVIEW_BASE_URL`（按需，若后续恢复 RSS 可复用该配置）。
-3. **执行阶段建议拆分 Job**：
-   1. 初始化：检出代码、设置 Node 版本、安装依赖（使用锁文件）。
-   2. 环境校验：检测必需 Secrets 是否存在，缺失直接 fail。
-   3. 数据拉取：调用 Supabase 读取最近 N 条/天记录，对比上次快照计算增量，输出新增/修改/下线统计。
-   4. 再生成 / 缓存刷新：调用站点再验证接口或触发 CDN 失效，传入 `SITE_REVALIDATE_TOKEN`。
-   5. 站点地图：生成最新 `sitemap.xml`，必要时上传对象存储并校验 HTTP 200 与缓存头。（RSS 可在后续恢复时复用同一流程。）
-   6. 状态记录与通知：写入“最近同步时间”文件或表，并向 `STATUS_PING_URL` / ChatOps 发送摘要。
-   7. 失败处理：捕获异常、归档日志，冷却 3–5 分钟后自动重试一次；连续失败≥2 次推送告警并暂停自动发布。
-4. **安全与产出**：
-   - 所有 Secrets 保持最小权限，禁止在日志打印完整密钥。
-   - 日志需包含拉取数量、增量统计、再生成路径数、Sitemap 条目数及耗时。（若恢复 RSS，再追加相应统计。）
-   - 状态页应呈现最近一次 Actions 成功时间与数据增量概览。
+本项目基于 [MIT License](./LICENSE) 开源，欢迎在遵守许可条款的前提下复制、修改与分发。若在生产环境中使用，建议保留版权声明并注明来源。

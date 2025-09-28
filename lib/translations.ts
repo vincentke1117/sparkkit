@@ -92,7 +92,6 @@ type FooterCopy = {
   compliance: string;
 };
 
-
 type UiCopy = {
   nav: {
     home: string;

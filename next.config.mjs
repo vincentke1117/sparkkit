@@ -19,5 +19,4 @@ if (normalizedBasePath) {
   nextConfig.basePath = normalizedBasePath;
 }
 
-
 export default nextConfig;
