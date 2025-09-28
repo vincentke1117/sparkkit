@@ -4,7 +4,6 @@ import { ShowcaseFilters, ShowcaseRecord } from './types';
 const FEATURED_COUNT_PER_TIER = 3;
 const DAILY_REFRESH_HOUR = 8; // 08:00 Beijing time
 
-
 export const SHOWCASE_TABLE_CANDIDATES = Array.from(
   new Set(
     [process.env.NEXT_PUBLIC_SUPABASE_TABLE, 'frontend_showcase', 'codepen_showcases'].filter(

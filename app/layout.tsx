@@ -3,6 +3,7 @@ import '@/app/globals.css';
 import type { Metadata, Viewport } from 'next';
 
 import { GoogleTagManagerBody, GoogleTagManagerHead } from '@/components/GoogleTagManager';
+import { GoogleAdsenseScript } from '@/components/GoogleAdsense';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang={defaultLocale === 'zh' ? 'zh-CN' : 'en'}>
       <head>
         <GoogleTagManagerHead />
+        <GoogleAdsenseScript />
         <link rel="preconnect" href="https://codepen.io" />
         <link rel="preconnect" href="https://assets.codepen.io" />
         <link rel="preconnect" href="https://cpwebassets.codepen.io" />
