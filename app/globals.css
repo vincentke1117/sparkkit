@@ -354,20 +354,21 @@ a {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
 }
 
 .showcase-card__action {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 9999px;
   text-decoration: none;
   font-weight: 600;
-  color: rgba(237, 240, 255, 0.9);
+  font-size: 0.7rem;
+  color: rgba(237, 240, 255, 0.85);
   background: rgba(111, 155, 255, 0.14);
   border: 1px solid rgba(111, 155, 255, 0.35);
   transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
@@ -383,4 +384,8 @@ a {
 .showcase-card__action--external span:first-child {
   font-size: 0.9rem;
   line-height: 1;
+}
+
+.showcase-card:is(:hover, :focus-within) .showcase-card__tags {
+  display: none;
 }

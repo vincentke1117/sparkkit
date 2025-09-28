@@ -2,7 +2,6 @@ import 'server-only';
 
 import { setDefaultResultOrder } from 'node:dns';
 
-import type { ProxyAgent } from 'undici';
 import { createClient, SupabaseClient, PostgrestError } from '@supabase/supabase-js';
 import { cache } from 'react';
 
@@ -27,10 +26,15 @@ const proxyUrl =
 
 const UNDICI_SPECIFIER = 'undici';
 
-let undiciPromise: Promise<typeof import('undici') | null> | null = null;
-let cachedDispatcher: ProxyAgent | null = null;
+type UndiciModule = {
+  ProxyAgent: new (proxyUrl: string) => unknown;
+  fetch: typeof fetch;
+};
 
-async function loadUndici(): Promise<typeof import('undici') | null> {
+let undiciPromise: Promise<UndiciModule | null> | null = null;
+let cachedDispatcher: unknown = null;
+
+async function loadUndici(): Promise<UndiciModule | null> {
   if (typeof window !== 'undefined') {
     return null;
   }
@@ -64,7 +68,10 @@ const fetchWithProxy: typeof fetch = async (input, init) => {
     cachedDispatcher = new UndiciProxyAgent(proxyUrl);
   }
 
-  const finalInit = { ...(init ?? {}), dispatcher: cachedDispatcher } as RequestInit & { dispatcher: ProxyAgent };
+  const finalInit = { ...(init ?? {}), dispatcher: cachedDispatcher } as RequestInit & {
+    // Dispatcher typing is provided at runtime by undici; using unknown keeps the dependency optional.
+    dispatcher: unknown;
+  };
 
   return undiciFetch(input as any, finalInit as any) as unknown as Promise<Response>;
 };

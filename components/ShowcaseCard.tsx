@@ -8,6 +8,7 @@ import { formatDateReadable, formatRelativeTime, getLocalizedText } from '@/lib/
 import { buildPenUrl } from '@/lib/url';
 import { ShowcaseRecord } from '@/lib/types';
 import { getUiCopy } from '@/lib/translations';
+import { getSiteUrl } from '@/lib/site';
 
 import { useLanguage } from './LanguageProvider';
 import { TagList } from './TagList';
@@ -98,13 +99,14 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
   const author = record.author_name ?? record.pen_user;
   const detailLabel = locale.startsWith('zh') ? '阅读解读' : 'Read analysis';
   const localeQuery = locale.startsWith('zh') ? 'hl=zh-cn' : 'hl=en';
-  const detailHref = `/p/${record.pen_user}/${record.pen_slug}?${localeQuery}`;
+  const detailPath = `/p/${record.pen_user}/${record.pen_slug}/`;
+  const detailHref = `${detailPath}?${localeQuery}`;
 
   const [copied, setCopied] = useState(false);
 
   const copyLink = useCallback(async () => {
     try {
-      const targetUrl = new URL(detailHref, window.location.origin).toString();
+      const targetUrl = getSiteUrl(detailHref);
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(targetUrl);
       } else {

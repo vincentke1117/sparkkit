@@ -25,7 +25,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
   const initialTags = useMemo(() => new Set(searchParams.getAll('tags')), [searchParams]);
 
   const [query, setQuery] = useState(searchParams.get('q') ?? '');
-  const [stack, setStack] = useState(searchParams.get('stack') ?? '');
+  const [stack, setStack] = useState(searchParams.get('stack') ?? 'all');
   const [difficulty, setDifficulty] = useState(searchParams.get('difficulty') ?? '');
   const [order, setOrder] = useState(searchParams.get('order') ?? '');
   const [selectedTags, setSelectedTags] = useState<Set<string>>(initialTags);
@@ -33,7 +33,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
 
   useEffect(() => {
     setQuery(searchParams.get('q') ?? '');
-    setStack(searchParams.get('stack') ?? '');
+    setStack(searchParams.get('stack') ?? 'all');
     setDifficulty(searchParams.get('difficulty') ?? '');
     setOrder(searchParams.get('order') ?? '');
     const nextTags = new Set(searchParams.getAll('tags'));
@@ -60,7 +60,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
     if (query.trim()) {
       params.set('q', query.trim());
     }
-    if (stack) {
+    if (stack && stack !== 'all') {
       params.set('stack', stack);
     }
     if (difficulty) {
@@ -81,7 +81,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
 
   function handleReset() {
     setQuery('');
-    setStack('');
+    setStack('all');
     setDifficulty('');
     setOrder('');
     setSelectedTags(new Set());
@@ -94,7 +94,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
   return (
     <form
       onSubmit={handleSubmit}
-      className="glass-panel flex flex-col gap-6 rounded-3xl p-6 text-sm text-white/80 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:max-w-[260px] lg:overflow-y-auto lg:pr-2"
+      className="glass-panel flex flex-col gap-6 self-start rounded-3xl p-6 text-sm text-white/80 md:sticky md:top-24 md:max-h-[calc(100vh-6rem)] md:max-w-[260px] md:overflow-y-auto md:pr-2"
       aria-label={copy.filters.ariaLabel}
     >
       <div className="flex flex-col gap-2">
@@ -120,7 +120,7 @@ export function ShowcaseFilters({ availableTags, stacks, difficulties }: Props) 
             onChange={(event) => setStack(event.target.value)}
             className="focus-outline rounded-xl border border-white/10 bg-white text-slate-900 px-4 py-3 text-sm shadow-sm"
           >
-            <option value="">{copy.filters.allOption}</option>
+            <option value="all">{copy.filters.allOption}</option>
             {stacks.map((option) => (
               <option key={option} value={option} style={{ color: '#0d1328' }}>
                 {option}

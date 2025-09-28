@@ -11,7 +11,6 @@ const ogImageUrl = getOgImageUrl();
 const defaultLocale = getDefaultLocale();
 const rssUrl = getSiteUrl('/rss.xml');
 
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {

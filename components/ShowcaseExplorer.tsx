@@ -36,7 +36,8 @@ function parseSearchParams(searchParams: URLSearchParams, pageSize: number): Sho
   const offset = (normalizedPage - 1) * pageSize;
   const tags = searchParams.getAll('tags');
   const query = searchParams.get('q') ?? undefined;
-  const stack = searchParams.get('stack') ?? undefined;
+  const stackParam = searchParams.get('stack');
+  const stack = stackParam && stackParam.toLowerCase() !== 'all' ? stackParam : undefined;
   const difficulty = searchParams.get('difficulty') ?? undefined;
   const orderParam = searchParams.get('order') ?? undefined;
   const order = orderParam === 'oldest' ? 'oldest' : orderParam === 'latest' ? 'latest' : undefined;

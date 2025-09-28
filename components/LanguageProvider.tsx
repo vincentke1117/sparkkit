@@ -35,10 +35,12 @@ export function LanguageProvider({
         return;
       }
 
-      const navigatorLocale = typeof navigator !== 'undefined' ? normalizeNavigatorLanguage(navigator.language) : null;
-      const fallback = navigatorLocale ?? defaultLocale;
-      if (fallback !== locale) {
-        setLocaleState(fallback);
+      if (!hl) {
+        const navigatorLocale = typeof navigator !== 'undefined' ? normalizeNavigatorLanguage(navigator.language) : null;
+        const fallback = navigatorLocale ?? defaultLocale;
+        if (fallback && fallback !== locale) {
+          setLocaleState(fallback);
+        }
       }
     };
 
