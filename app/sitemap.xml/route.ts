@@ -8,16 +8,19 @@ const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
   </url>
   <url>
     <loc>https://spark.vincentke.cc/showcases</loc>
+    <lastmod>2025-09-28T14:32:18+00:00</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://spark.vincentke.cc/search</loc>
+    <lastmod>2025-09-28T14:32:18+00:00</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://spark.vincentke.cc/status</loc>
+    <lastmod>2025-09-28T14:32:18+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
