@@ -186,7 +186,7 @@ export function ShowcaseCard({ record }: { record: ShowcaseRecord }) {
           <a
             href={penUrl}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow"
             className="showcase-card__action showcase-card__action--external focus-outline"
           >
             <span aria-hidden>↗</span>

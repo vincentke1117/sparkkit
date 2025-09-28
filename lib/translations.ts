@@ -84,6 +84,15 @@ type StatusCopy = {
   cronCadence: string;
 };
 
+type FooterCopy = {
+  copyright: string;
+  privacy: string;
+  terms: string;
+  support: string;
+  compliance: string;
+};
+
+
 type UiCopy = {
   nav: {
     home: string;
@@ -123,6 +132,7 @@ type UiCopy = {
   common: {
     previewLoading: string;
   };
+  footer: FooterCopy;
 };
 
 const UI_COPY: Record<SupportedLocale, UiCopy> = {
@@ -253,6 +263,13 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     common: {
       previewLoading: 'Preview loading…',
     },
+    footer: {
+      copyright: '© 2025 SparkKit · CodePen inspiration by VincentK.',
+      privacy: 'Privacy policy',
+      terms: 'Terms of service',
+      support: 'Support',
+      compliance: 'Need help with policies? Reach out anytime.',
+    },
   },
   zh: {
     nav: {
@@ -375,6 +392,13 @@ const UI_COPY: Record<SupportedLocale, UiCopy> = {
     },
     common: {
       previewLoading: '作品预览加载中…',
+    },
+    footer: {
+      copyright: '© 2025 SparkKit · CodePen inspiration by VincentK.',
+      privacy: '隐私政策',
+      terms: '服务条款',
+      support: '支持',
+      compliance: '如需了解政策合规，可随时联系我们。',
     },
   },
 };

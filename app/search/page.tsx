@@ -4,12 +4,12 @@ import type { Metadata } from 'next';
 import { ShowcaseExplorerFallback } from '@/components/ShowcaseExplorer';
 import { PAGE_SIZE } from '@/components/ShowcaseFilters';
 import { ShowcasesPageShell } from '@/components/ShowcasesPageShell';
-import { createListMetadata } from '@/lib/meta';
+import { createSearchMetadata } from '@/lib/meta';
 import { fetchDistinctFilters, fetchShowcases } from '@/lib/supabase';
 
 export const revalidate = 900;
 
-export const metadata: Metadata = createListMetadata('/search');
+export const metadata: Metadata = createSearchMetadata();
 
 export default async function SearchPage() {
   const [recordsRaw, filterOptions] = await Promise.all([

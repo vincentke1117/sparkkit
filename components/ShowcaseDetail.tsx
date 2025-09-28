@@ -77,7 +77,7 @@ export function ShowcaseDetail({ record, jsonLd, canonical }: ShowcaseDetailProp
             <a
               href={penUrl}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               className="ml-1 underline decoration-dotted decoration-white/40 underline-offset-4 hover:text-white"
             >
               CodePen
@@ -96,7 +96,7 @@ export function ShowcaseDetail({ record, jsonLd, canonical }: ShowcaseDetailProp
           <a
             href={penUrl}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow"
             className="focus-outline inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-2 text-xs uppercase tracking-[0.25em] text-white/70 transition hover:border-accent/60 hover:text-white"
           >
             <span aria-hidden>↗</span>
@@ -127,7 +127,7 @@ export function ShowcaseDetail({ record, jsonLd, canonical }: ShowcaseDetailProp
                   <a
                     href={penUrl}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer nofollow"
                     className="ml-1 inline-flex items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white"
                   >
                     ↗ {copy.detail.openOnCodepen}
@@ -199,7 +199,12 @@ export function ShowcaseDetail({ record, jsonLd, canonical }: ShowcaseDetailProp
       <footer className="flex flex-wrap items-center justify-between gap-4 text-xs text-white/50">
         <span>
           {copy.detail.originalLinkLabel}：
-          <a href={penUrl} target="_blank" rel="noopener noreferrer" className="ml-2 underline decoration-dotted decoration-white/40 underline-offset-4 hover:text-white">
+          <a
+            href={penUrl}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className="ml-2 underline decoration-dotted decoration-white/40 underline-offset-4 hover:text-white"
+          >
             {penUrl}
           </a>
         </span>

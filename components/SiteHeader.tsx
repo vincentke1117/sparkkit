@@ -48,7 +48,7 @@ export function SiteHeader() {
                   href={buildHref(link.path)}
                   className="focus-outline rounded-full px-3 py-1 transition hover:bg-white/5 hover:text-white"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                 >
                   {link.label}
                 </a>
