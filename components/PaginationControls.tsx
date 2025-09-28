@@ -1,0 +1,70 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
+
+import { PAGE_SIZE } from './ShowcaseFilters';
+import { getUiCopy } from '@/lib/translations';
+import { useLanguage } from './LanguageProvider';
+
+export function PaginationControls({
+  hasNext,
+  currentPage,
+  isLoading = false,
+}: {
+  hasNext: boolean;
+  currentPage: number;
+  isLoading?: boolean;
+}) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { locale } = useLanguage();
+  const copy = getUiCopy(locale);
+
+  const prevParams = new URLSearchParams(searchParams.toString());
+  prevParams.set('page', Math.max(1, currentPage - 1).toString());
+  const nextParams = new URLSearchParams(searchParams.toString());
+  nextParams.set('page', (currentPage + 1).toString());
+  prevParams.set('hl', locale === 'zh' ? 'zh-cn' : 'en');
+  nextParams.set('hl', locale === 'zh' ? 'zh-cn' : 'en');
+
+  const baseHref = `${pathname ?? '/showcases'}?hl=${locale === 'zh' ? 'zh-cn' : 'en'}`;
+
+  const disablePrev = currentPage <= 1 || isLoading;
+  const disableNext = !hasNext || isLoading;
+
+  return (
+    <nav
+      className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-white/70"
+      aria-label="Pagination"
+    >
+      <div>{copy.pagination.pageStatus(currentPage, PAGE_SIZE)}</div>
+      <div className="flex items-center gap-2">
+        <Link
+          aria-disabled={disablePrev}
+          tabIndex={disablePrev ? -1 : undefined}
+          href={disablePrev ? baseHref : `${pathname}?${prevParams.toString()}`}
+          className={`focus-outline inline-flex items-center gap-2 rounded-full border px-4 py-2 transition ${
+            disablePrev
+              ? 'cursor-not-allowed border-white/10 text-white/30'
+              : 'border-white/20 text-white/70 hover:border-accent/60 hover:text-white'
+          }`}
+        >
+          {copy.pagination.previous}
+        </Link>
+        <Link
+          aria-disabled={disableNext}
+          tabIndex={disableNext ? -1 : undefined}
+          href={disableNext ? baseHref : `${pathname}?${nextParams.toString()}`}
+          className={`focus-outline inline-flex items-center gap-2 rounded-full border px-4 py-2 transition ${
+            disableNext
+              ? 'cursor-not-allowed border-white/10 text-white/30'
+              : 'border-white/20 text-white/70 hover:border-accent/60 hover:text-white'
+          }`}
+        >
+          {copy.pagination.next}
+        </Link>
+      </div>
+    </nav>
+  );
+}
