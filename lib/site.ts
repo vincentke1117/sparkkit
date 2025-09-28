@@ -41,6 +41,7 @@ function normalizeBasePath(value?: string | null): string {
 
 const SITE_URL =
   normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL) ?? 'https://spark.vincentke.cc';
+
 const BASE_PATH = normalizeBasePath(process.env.NEXT_PUBLIC_BASE_PATH);
 const DEFAULT_LOCALE_ENV = process.env.NEXT_PUBLIC_DEFAULT_LOCALE?.toLowerCase();
 

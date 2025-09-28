@@ -107,6 +107,7 @@ npm run start
 
 Vercel 原生支持 Next.js 的 SSR / ISR 与图片优化，因此不再需要 `output: export` 或手工上传 `out/` 目录。若后续仍需静态导出，可通过 `NEXT_PUBLIC_BASE_PATH` 等变量在运行时区分托管环境。
 
+
 ## GitHub Actions 执行说明（无代码）
 
 1. **触发方式**：

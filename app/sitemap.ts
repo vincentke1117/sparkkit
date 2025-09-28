@@ -10,7 +10,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getSiteUrl();
   const showcases = await fetchShowcases();
   const featured = selectDailyFeatured(showcases);
-
   const staticEntries: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
